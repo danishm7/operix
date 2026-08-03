@@ -1,0 +1,11 @@
+{
+  "dotnet.defaultSolution": "backend/Operix.sln",
+  "files.exclude": {
+    "**/bin": true,
+    "**/obj": true
+  },
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit"
+  }
+}
