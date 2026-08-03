@@ -1,0 +1,7 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\Operix.Domain\Operix.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

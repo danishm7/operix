@@ -49,7 +49,7 @@ Integrations --> Entities
 |--------|----------------|
 | Presentation | API endpoints, middleware, authentication |
 | Application | Use cases, workflow orchestration, validation |
-| Domain | Entities, business rules, interfaces |
+| Domain | Entities, business rules, domain interfaces |
 | Infrastructure | Database, repositories, external services |
 
 ---

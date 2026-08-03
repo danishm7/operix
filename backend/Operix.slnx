@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Operix.Api/Operix.Api.csproj" />
+    <Project Path="src/Operix.Application/Operix.Application.csproj" />
+    <Project Path="src/Operix.Domain/Operix.Domain.csproj" />
+    <Project Path="src/Operix.Infrastructure/Operix.Infrastructure.csproj" />
+  </Folder>
+</Solution>
