@@ -8,7 +8,7 @@ Defines the naming conventions used across Operix to ensure consistency and main
 
 | Item            | Convention            | Example                         |
 | --------------- | --------------------- | ------------------------------- |
-| Schemas         | lowercase             | `cmms`, `security`, `audit`     |
+| Schemas         | lowercase             | `core`, `cmms`, `security`      |
 | Tables          | Singular, snake_case  | `organization`, `work_order`    |
 | Columns         | snake_case            | `created_on`, `organization_id` |
 | Primary Key     | `id`                  | `id`                            |

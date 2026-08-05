@@ -4,21 +4,24 @@ using Operix.Domain.Entities;
 
 namespace Operix.Infrastructure.Data.Configurations;
 
-public sealed class OrganizationConfiguration : IEntityTypeConfiguration<Organization>
+public sealed class PermissionConfiguration : IEntityTypeConfiguration<Permission>
 {
-    public void Configure(EntityTypeBuilder<Organization> builder)
+    public void Configure(EntityTypeBuilder<Permission> builder)
     {
-        builder.ToTable("organization", "core");
+        builder.ToTable("permission", "core");
 
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Name)
-            .HasMaxLength(200)
+            .HasMaxLength(100)
             .IsRequired();
 
         builder.Property(x => x.Code)
-            .HasMaxLength(50)
+            .HasMaxLength(100)
             .IsRequired();
+
+        builder.Property(x => x.Description)
+            .HasMaxLength(500);
 
         builder.Property(x => x.IsActive)
             .IsRequired();
