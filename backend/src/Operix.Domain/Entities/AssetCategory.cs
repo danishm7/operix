@@ -2,15 +2,15 @@ using Operix.Domain.Common;
 
 namespace Operix.Domain.Entities;
 
-public sealed class Location : AuditableEntity
+public sealed class AssetCategory : AuditableEntity
 {
     public int OrganizationId { get; private set; }
-
-    public int? ParentLocationId { get; private set; }
 
     public string Name { get; private set; } = string.Empty;
 
     public string Code { get; private set; } = string.Empty;
+
+    public string? Description { get; private set; }
 
     public bool IsActive { get; private set; }
 
@@ -18,10 +18,5 @@ public sealed class Location : AuditableEntity
 
     public Organization Organization { get; private set; } = null!;
 
-    public Location? ParentLocation { get; private set; }
-
-    public ICollection<Location> ChildLocations { get; private set; } = [];
-
     public ICollection<Asset> Assets { get; private set; } = [];
-    public ICollection<Inventory> Inventories { get; private set; } = [];
 }
