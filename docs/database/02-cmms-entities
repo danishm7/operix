@@ -1,0 +1,77 @@
+# CMMS Entities
+
+## Purpose
+
+Defines the business entities, their attributes, and relationships for Operix CMMS.
+
+---
+
+## Asset Category
+
+...
+
+---
+
+## Asset
+
+...
+
+---
+
+## Asset Document
+
+...
+
+---
+
+## Work Order
+
+...
+
+---
+
+## Work Order Task
+
+...
+
+---
+
+## Preventive Maintenance Plan
+
+...
+
+---
+
+## Maintenance Schedule
+
+...
+
+---
+
+## Spare Part
+
+...
+
+---
+
+## Inventory
+
+...
+
+---
+
+## Stock Transaction
+
+...
+
+---
+
+## Vendor
+
+...
+
+---
+
+## Audit Log
+
+...

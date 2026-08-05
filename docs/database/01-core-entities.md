@@ -1,8 +1,8 @@
-# CMMS Entities
+# Core Entities
 
 ## Purpose
 
-Defines the business entities, their attributes, and relationships for Operix CMMS.
+Defines the business entities, their attributes, and relationships for Operix.
 
 ---
 
@@ -23,6 +23,49 @@ Defines the business entities, their attributes, and relationships for Operix CM
 | Location   | One-to-Many |
 | User       | One-to-Many |
 | Asset      | One-to-Many |
+
+---
+
+## Location
+
+| Column             | Type        | Required | Description                                  |
+| ------------------ | ----------- | :------: | -------------------------------------------- |
+| id                 | int         |   Yes    | Primary key                                  |
+| organization_id    | int         |   Yes    | Reference to Organization                    |
+| parent_location_id | int         |    No    | Parent location                              |
+| name               | string(200) |   Yes    | Location name                                |
+| code               | string(50)  |   Yes    | Unique location code within the organization |
+| is_active          | bool        |   Yes    | Indicates whether the location is active     |
+
+### Relationships
+
+| Entity       | Type                    |
+| ------------ | ----------------------- |
+| Organization | Many-to-One             |
+| Location     | One-to-Many (Hierarchy) |
+| Asset        | One-to-Many             |
+
+---
+
+## Department
+
+| Column               | Type        | Required | Description                                    |
+| -------------------- | ----------- | :------: | ---------------------------------------------- |
+| id                   | int         |   Yes    | Primary key                                    |
+| organization_id      | int         |   Yes    | Reference to Organization                      |
+| parent_department_id | int         |    No    | Parent department                              |
+| name                 | string(200) |   Yes    | Department name                                |
+| code                 | string(50)  |   Yes    | Unique department code within the organization |
+| is_active            | bool        |   Yes    | Indicates whether the department is active     |
+
+### Relationships
+
+| Entity       | Type                    |
+| ------------ | ----------------------- |
+| Organization | Many-to-One             |
+| Department   | One-to-Many (Hierarchy) |
+| User         | One-to-Many             |
+| Asset        | One-to-Many             |
 
 ---
 
@@ -119,117 +162,3 @@ Defines the business entities, their attributes, and relationships for Operix CM
 | Role       | Many-to-One |
 | Permission | Many-to-One |
 
----
-
-## Department
-
-| Column               | Type        | Required | Description                                    |
-| -------------------- | ----------- | :------: | ---------------------------------------------- |
-| id                   | int         |   Yes    | Primary key                                    |
-| organization_id      | int         |   Yes    | Reference to Organization                      |
-| parent_department_id | int         |    No    | Parent department                              |
-| name                 | string(200) |   Yes    | Department name                                |
-| code                 | string(50)  |   Yes    | Unique department code within the organization |
-| is_active            | bool        |   Yes    | Indicates whether the department is active     |
-
-### Relationships
-
-| Entity       | Type                    |
-| ------------ | ----------------------- |
-| Organization | Many-to-One             |
-| Department   | One-to-Many (Hierarchy) |
-| User         | One-to-Many             |
-| Asset        | One-to-Many             |
-
----
-
-## Location
-
-| Column             | Type        | Required | Description                                  |
-| ------------------ | ----------- | :------: | -------------------------------------------- |
-| id                 | int         |   Yes    | Primary key                                  |
-| organization_id    | int         |   Yes    | Reference to Organization                    |
-| parent_location_id | int         |    No    | Parent location                              |
-| name               | string(200) |   Yes    | Location name                                |
-| code               | string(50)  |   Yes    | Unique location code within the organization |
-| is_active          | bool        |   Yes    | Indicates whether the location is active     |
-
-### Relationships
-
-| Entity       | Type                    |
-| ------------ | ----------------------- |
-| Organization | Many-to-One             |
-| Location     | One-to-Many (Hierarchy) |
-| Asset        | One-to-Many             |
-
----
-
-## Asset Category
-
-...
-
----
-
-## Asset
-
-...
-
----
-
-## Asset Document
-
-...
-
----
-
-## Work Order
-
-...
-
----
-
-## Work Order Task
-
-...
-
----
-
-## Preventive Maintenance Plan
-
-...
-
----
-
-## Maintenance Schedule
-
-...
-
----
-
-## Spare Part
-
-...
-
----
-
-## Inventory
-
-...
-
----
-
-## Stock Transaction
-
-...
-
----
-
-## Vendor
-
-...
-
----
-
-## Audit Log
-
-...
