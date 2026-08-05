@@ -8,67 +8,270 @@ Defines the business entities, their attributes, and relationships for Operix CM
 
 ## Asset Category
 
-...
+| Column          | Type        | Required | Description                                  |
+| --------------- | ----------- | -------- | -------------------------------------------- |
+| id              | int         | Yes      | Primary key                                  |
+| organization_id | int         | Yes      | Reference to Organization                    |
+| name            | string(200) | Yes      | Asset category name                          |
+| code            | string(50)  | Yes      | Unique category code within the organization |
+| description     | string(500) | No       | Asset category description                   |
+| is_active       | bool        | Yes      | Indicates whether the category is active     |
+
+### Relationships
+
+| Entity       | Type        |
+| ------------ | ----------- |
+| Organization | Many-to-One |
+| Asset        | One-to-Many |
 
 ---
 
 ## Asset
 
-...
+| Column               | Type        | Required | Description                               |
+| -------------------- | ----------- | -------- | ----------------------------------------- |
+| id                   | int         | Yes      | Primary key                               |
+| organization_id      | int         | Yes      | Reference to Organization                 |
+| asset_category_id    | int         | Yes      | Reference to Asset Category               |
+| location_id          | int         | Yes      | Reference to Location                     |
+| name                 | string(200) | Yes      | Asset name                                |
+| code                 | string(50)  | Yes      | Unique asset code within the organization |
+| serial_number        | string(100) | No       | Manufacturer serial number                |
+| manufacturer         | string(200) | No       | Manufacturer name                         |
+| model                | string(200) | No       | Asset model                               |
+| installation_date    | date        | No       | Installation date                         |
+| purchase_date        | date        | No       | Purchase date                             |
+| warranty_expiry_date | date        | No       | Warranty expiry date                      |
+| status               | string(50)  | Yes      | Current asset status                      |
+| is_active            | bool        | Yes      | Indicates whether the asset is active     |
+
+### Relationships
+
+| Entity         | Type        |
+| -------------- | ----------- |
+| Organization   | Many-to-One |
+| Asset Category | Many-to-One |
+| Location       | Many-to-One |
+| Asset Document | One-to-Many |
+| Work Order     | One-to-Many |
 
 ---
 
 ## Asset Document
 
-...
+| Column      | Type        | Required | Description                 |
+| ----------- | ----------- | -------- | --------------------------- |
+| id          | int         | Yes      | Primary key                 |
+| asset_id    | int         | Yes      | Reference to Asset          |
+| file_name   | string(255) | Yes      | Original file name          |
+| file_path   | string(500) | Yes      | Storage path or URL         |
+| file_type   | string(100) | Yes      | File MIME type or extension |
+| file_size   | long        | Yes      | File size in bytes          |
+| description | string(500) | No       | Document description        |
+
+### Relationships
+
+| Entity | Type        |
+| ------ | ----------- |
+| Asset  | Many-to-One |
 
 ---
 
 ## Work Order
 
-...
+| Column                         | Type         | Required | Description                                      |
+| ------------------------------ | ------------ | -------- | ------------------------------------------------ |
+| id                             | int          | Yes      | Primary key                                      |
+| organization_id                | int          | Yes      | Reference to Organization                        |
+| asset_id                       | int          | Yes      | Reference to Asset                               |
+| preventive_maintenance_plan_id | int          | No       | Reference to Preventive Maintenance Plan         |
+| assigned_user_id               | int          | No       | Assigned technician                              |
+| work_order_number              | string(50)   | Yes      | Unique work order number within the organization |
+| title                          | string(200)  | Yes      | Work order title                                 |
+| description                    | string(1000) | No       | Work order description                           |
+| priority                       | string(50)   | Yes      | Work order priority                              |
+| status                         | string(50)   | Yes      | Current work order status                        |
+| scheduled_date                 | date         | No       | Scheduled execution date                         |
+| due_date                       | date         | No       | Due date                                         |
+| completed_date                 | date         | No       | Completion date                                  |
+| is_active                      | bool         | Yes      | Indicates whether the work order is active       |
+
+### Relationships
+
+| Entity                      | Type        |
+| --------------------------- | ----------- |
+| Organization                | Many-to-One |
+| Asset                       | Many-to-One |
+| Preventive Maintenance Plan | Many-to-One |
+| User                        | Many-to-One |
+| Maintenance Schedule        | One-to-One  |
+| Work Order Task             | One-to-Many |
 
 ---
 
 ## Work Order Task
 
-...
+| Column             | Type         | Required | Description                           |
+| ------------------ | ------------ | -------- | ------------------------------------- |
+| id                 | int          | Yes      | Primary key                           |
+| work_order_id      | int          | Yes      | Reference to Work Order               |
+| title              | string(200)  | Yes      | Task title                            |
+| description        | string(1000) | No       | Task description                      |
+| sequence           | int          | Yes      | Execution order within the work order |
+| status             | string(50)   | Yes      | Current task status                   |
+| estimated_duration | int          | No       | Estimated duration in minutes         |
+| actual_duration    | int          | No       | Actual duration in minutes            |
+| completed_date     | datetime     | No       | Task completion date and time         |
+
+### Relationships
+
+| Entity     | Type        |
+| ---------- | ----------- |
+| Work Order | Many-to-One |
 
 ---
 
 ## Preventive Maintenance Plan
 
-...
+| Column          | Type        | Required | Description                              |
+| --------------- | ----------- | -------- | ---------------------------------------- |
+| id              | int         | Yes      | Primary key                              |
+| organization_id | int         | Yes      | Reference to Organization                |
+| asset_id        | int         | Yes      | Reference to Asset                       |
+| name            | string(200) | Yes      | Preventive maintenance plan name         |
+| code            | string(50)  | Yes      | Unique plan code within the organization |
+| description     | string(500) | No       | Plan description                         |
+| frequency       | string(50)  | Yes      | Maintenance frequency                    |
+| start_date      | date        | Yes      | Plan start date                          |
+| end_date        | date        | No       | Plan end date                            |
+| is_active       | bool        | Yes      | Indicates whether the plan is active     |
+
+### Relationships
+
+| Entity               | Type        |
+| -------------------- | ----------- |
+| Organization         | Many-to-One |
+| Asset                | Many-to-One |
+| Maintenance Schedule | One-to-Many |
+| Work Order           | One-to-Many |
 
 ---
 
 ## Maintenance Schedule
 
-...
+| Column                         | Type        | Required | Description                              |
+| ------------------------------ | ----------- | -------- | ---------------------------------------- |
+| id                             | int         | Yes      | Primary key                              |
+| preventive_maintenance_plan_id | int         | Yes      | Reference to Preventive Maintenance Plan |
+| scheduled_date                 | date        | Yes      | Scheduled maintenance date               |
+| completed_date                 | date        | No       | Actual completion date                   |
+| status                         | string(50)  | Yes      | Current schedule status                  |
+| work_order_id                  | int         | No       | Generated work order                     |
+| remarks                        | string(500) | No       | Additional remarks                       |
+
+### Relationships
+
+| Entity                      | Type                  |
+| --------------------------- | --------------------- |
+| Preventive Maintenance Plan | Many-to-One           |
+| Work Order                  | One-to-One (Optional) |
 
 ---
 
 ## Spare Part
 
-...
+| Column          | Type          | Required | Description                                      |
+| --------------- | ------------- | -------- | ------------------------------------------------ |
+| id              | int           | Yes      | Primary key                                      |
+| organization_id | int           | Yes      | Reference to Organization                        |
+| vendor_id       | int           | No       | Reference to Vendor                              |
+| part_number     | string(100)   | Yes      | Unique spare part number within the organization |
+| name            | string(200)   | Yes      | Spare part name                                  |
+| description     | string(500)   | No       | Spare part description                           |
+| unit_of_measure | string(50)    | Yes      | Unit of measure (e.g., Piece, Box, Liter)        |
+| minimum_stock   | decimal(18,2) | Yes      | Minimum stock level                              |
+| reorder_level   | decimal(18,2) | Yes      | Stock level to trigger replenishment             |
+| unit_cost       | decimal(18,2) | No       | Cost per unit                                    |
+| is_active       | bool          | Yes      | Indicates whether the spare part is active       |
+
+### Relationships
+
+| Entity            | Type        |
+| ----------------- | ----------- |
+| Organization      | Many-to-One |
+| Vendor            | Many-to-One |
+| Inventory         | One-to-Many |
+| Stock Transaction | One-to-Many |
 
 ---
 
 ## Inventory
 
-...
+| Column             | Type          | Required | Description                   |
+| ------------------ | ------------- | -------- | ----------------------------- |
+| id                 | int           | Yes      | Primary key                   |
+| organization_id    | int           | Yes      | Reference to Organization     |
+| location_id        | int           | Yes      | Reference to Location         |
+| spare_part_id      | int           | Yes      | Reference to Spare Part       |
+| quantity_on_hand   | decimal(18,2) | Yes      | Current available quantity    |
+| quantity_reserved  | decimal(18,2) | Yes      | Reserved quantity             |
+| quantity_available | decimal(18,2) | Yes      | Available quantity for use    |
+| last_stocked_date  | date          | No       | Last stock replenishment date |
+
+### Relationships
+
+| Entity       | Type        |
+| ------------ | ----------- |
+| Organization | Many-to-One |
+| Location     | Many-to-One |
+| Spare Part   | Many-to-One |
 
 ---
 
 ## Stock Transaction
 
-...
+| Column           | Type          | Required | Description                          |
+| ---------------- | ------------- | -------- | ------------------------------------ |
+| id               | int           | Yes      | Primary key                          |
+| organization_id  | int           | Yes      | Reference to Organization            |
+| inventory_id     | int           | Yes      | Reference to Inventory               |
+| work_order_id    | int           | No       | Reference to Work Order              |
+| transaction_type | string(50)    | Yes      | Type of stock transaction            |
+| quantity         | decimal(18,2) | Yes      | Transaction quantity                 |
+| unit_cost        | decimal(18,2) | No       | Unit cost at the time of transaction |
+| transaction_date | datetime      | Yes      | Date and time of the transaction     |
+| remarks          | string(500)   | No       | Additional remarks                   |
+
+### Relationships
+
+| Entity       | Type        |
+| ------------ | ----------- |
+| Organization | Many-to-One |
+| Inventory    | Many-to-One |
+| Work Order   | Many-to-One |
 
 ---
 
 ## Vendor
 
-...
+| Column          | Type        | Required | Description                                |
+| --------------- | ----------- | -------- | ------------------------------------------ |
+| id              | int         | Yes      | Primary key                                |
+| organization_id | int         | Yes      | Reference to Organization                  |
+| name            | string(200) | Yes      | Vendor name                                |
+| code            | string(50)  | Yes      | Unique vendor code within the organization |
+| contact_person  | string(200) | No       | Primary contact person                     |
+| email           | string(255) | No       | Contact email address                      |
+| phone_number    | string(20)  | No       | Contact phone number                       |
+| website         | string(255) | No       | Vendor website                             |
+| address         | string(500) | No       | Vendor address                             |
+| is_active       | bool        | Yes      | Indicates whether the vendor is active     |
+
+### Relationships
+
+| Entity       | Type        |
+| ------------ | ----------- |
+| Organization | Many-to-One |
 
 ---
 

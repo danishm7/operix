@@ -25,4 +25,5 @@ public sealed class User : AuditableEntity
     public Department Department { get; private set; } = null!;
 
     public ICollection<UserRole> UserRoles { get; private set; } = [];
+    public ICollection<WorkOrder> AssignedWorkOrders { get; private set; } = [];
 }

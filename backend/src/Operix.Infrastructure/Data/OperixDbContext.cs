@@ -16,6 +16,7 @@ public class OperixDbContext : DbContext
         base.OnModelCreating(modelBuilder);
     }
 
+    // core entities
     public DbSet<Organization> Organizations => Set<Organization>();
     public DbSet<Location> Locations => Set<Location>();
     public DbSet<Department> Departments => Set<Department>();
@@ -24,4 +25,18 @@ public class OperixDbContext : DbContext
     public DbSet<Permission> Permissions => Set<Permission>();
     public DbSet<RolePermission> RolePermissions => Set<RolePermission>();
     public DbSet<UserRole> UserRoles => Set<UserRole>();
+
+
+    // cmms entities
+    public DbSet<Asset> Assets => Set<Asset>();
+    public DbSet<AssetCategory> AssetCategories => Set<AssetCategory>();
+    public DbSet<AssetDocument> AssetDocuments => Set<AssetDocument>();
+    public DbSet<Vendor> Vendors => Set<Vendor>();
+    public DbSet<PreventiveMaintenancePlan> PreventiveMaintenancePlans => Set<PreventiveMaintenancePlan>();
+    public DbSet<MaintenanceSchedule> MaintenanceSchedules => Set<MaintenanceSchedule>();
+    public DbSet<WorkOrder> WorkOrders => Set<WorkOrder>();
+    public DbSet<WorkOrderTask> WorkOrderTasks => Set<WorkOrderTask>();
+    public DbSet<SparePart> SpareParts => Set<SparePart>();
+    public DbSet<Inventory> Inventories => Set<Inventory>();
+    public DbSet<StockTransaction> StockTransactions => Set<StockTransaction>();
 }
