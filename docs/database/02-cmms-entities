@@ -133,18 +133,20 @@ Defines the business entities, their attributes, and relationships for Operix CM
 
 ## Preventive Maintenance Plan
 
-| Column          | Type        | Required | Description                              |
-| --------------- | ----------- | -------- | ---------------------------------------- |
-| id              | int         | Yes      | Primary key                              |
-| organization_id | int         | Yes      | Reference to Organization                |
-| asset_id        | int         | Yes      | Reference to Asset                       |
-| name            | string(200) | Yes      | Preventive maintenance plan name         |
-| code            | string(50)  | Yes      | Unique plan code within the organization |
-| description     | string(500) | No       | Plan description                         |
-| frequency       | string(50)  | Yes      | Maintenance frequency                    |
-| start_date      | date        | Yes      | Plan start date                          |
-| end_date        | date        | No       | Plan end date                            |
-| is_active       | bool        | Yes      | Indicates whether the plan is active     |
+| Column             | Type        | Required | Description                              |
+| ------------------ | ----------- | -------- | ---------------------------------------- |
+| id                 | int         | Yes      | Primary key                              |
+| organization_id    | int         | Yes      | Reference to Organization                |
+| asset_id           | int         | Yes      | Reference to Asset                       |
+| name               | string(200) | Yes      | Preventive maintenance plan name         |
+| code               | string(50)  | Yes      | Unique plan code within the organization |
+| description        | string(500) | No       | Plan description                         |
+| frequency_type     | enum        | Yes      | Maintenance frequency type               |
+| frequency_interval | int         | Yes      | Interval between maintenance occurrences |
+| next_due_date      | date        | Yes      | Next scheduled maintenance date          |
+| start_date         | date        | Yes      | Plan start date                          |
+| end_date           | date        | No       | Plan end date                            |
+| is_active          | bool        | Yes      | Indicates whether the plan is active     |
 
 ### Relationships
 

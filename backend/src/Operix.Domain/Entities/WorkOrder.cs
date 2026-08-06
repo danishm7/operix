@@ -1,4 +1,5 @@
 using Operix.Domain.Common;
+using Operix.Domain.Enums;
 
 namespace Operix.Domain.Entities;
 
@@ -18,9 +19,9 @@ public sealed class WorkOrder : AuditableEntity
 
     public string? Description { get; private set; }
 
-    public string Priority { get; private set; } = string.Empty;
+    public WorkOrderPriority Priority { get; private set; }
 
-    public string Status { get; private set; } = string.Empty;
+    public WorkOrderStatus Status { get; private set; }
 
     public DateOnly? ScheduledDate { get; private set; }
 

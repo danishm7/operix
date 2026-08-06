@@ -1,4 +1,5 @@
 using Operix.Domain.Common;
+using Operix.Domain.Enums;
 
 namespace Operix.Domain.Entities;
 
@@ -26,7 +27,7 @@ public sealed class Asset : AuditableEntity
 
     public DateOnly? WarrantyExpiryDate { get; private set; }
 
-    public string Status { get; private set; } = string.Empty;
+    public AssetStatus Status { get; private set; }
 
     public bool IsActive { get; private set; }
 
