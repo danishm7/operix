@@ -1,4 +1,5 @@
 using Operix.Domain.Common;
+using Operix.Domain.Enums;
 
 namespace Operix.Domain.Entities;
 
@@ -14,7 +15,11 @@ public sealed class PreventiveMaintenancePlan : AuditableEntity
 
     public string? Description { get; private set; }
 
-    public string Frequency { get; private set; } = string.Empty;
+    public FrequencyType FrequencyType { get; private set; }
+
+    public int FrequencyInterval { get; private set; }
+
+    public DateOnly NextDueDate { get; private set; }
 
     public DateOnly StartDate { get; private set; }
 

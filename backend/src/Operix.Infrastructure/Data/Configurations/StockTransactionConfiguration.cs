@@ -13,6 +13,7 @@ public sealed class StockTransactionConfiguration : IEntityTypeConfiguration<Sto
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.TransactionType)
+            .HasConversion<string>()
             .HasMaxLength(50)
             .IsRequired();
 

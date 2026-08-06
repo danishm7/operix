@@ -1,4 +1,5 @@
 using Operix.Domain.Common;
+using Operix.Domain.Enums;
 
 namespace Operix.Domain.Entities;
 
@@ -10,7 +11,7 @@ public sealed class MaintenanceSchedule : AuditableEntity
 
     public DateOnly? CompletedDate { get; private set; }
 
-    public string Status { get; private set; } = string.Empty;
+    public MaintenanceScheduleStatus Status { get; private set; }
 
     public int? WorkOrderId { get; private set; }
 

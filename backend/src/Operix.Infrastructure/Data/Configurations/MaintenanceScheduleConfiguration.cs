@@ -18,6 +18,7 @@ public sealed class MaintenanceScheduleConfiguration : IEntityTypeConfiguration<
         builder.Property(x => x.CompletedDate);
 
         builder.Property(x => x.Status)
+            .HasConversion<string>()
             .HasMaxLength(50)
             .IsRequired();
 

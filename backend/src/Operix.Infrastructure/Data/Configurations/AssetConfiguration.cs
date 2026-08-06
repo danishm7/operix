@@ -30,6 +30,7 @@ public sealed class AssetConfiguration : IEntityTypeConfiguration<Asset>
             .HasMaxLength(200);
 
         builder.Property(x => x.Status)
+            .HasConversion<string>()
             .HasMaxLength(50)
             .IsRequired();
 

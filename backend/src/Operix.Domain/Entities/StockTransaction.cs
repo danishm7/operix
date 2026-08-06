@@ -1,4 +1,5 @@
 using Operix.Domain.Common;
+using Operix.Domain.Enums;
 
 namespace Operix.Domain.Entities;
 
@@ -10,7 +11,7 @@ public sealed class StockTransaction : AuditableEntity
 
     public int? WorkOrderId { get; private set; }
 
-    public string TransactionType { get; private set; } = string.Empty;
+    public StockTransactionType TransactionType { get; private set; }
 
     public decimal Quantity { get; private set; }
 

@@ -23,8 +23,15 @@ public sealed class PreventiveMaintenancePlanConfiguration : IEntityTypeConfigur
         builder.Property(x => x.Description)
             .HasMaxLength(500);
 
-        builder.Property(x => x.Frequency)
+        builder.Property(x => x.FrequencyType)
+            .HasConversion<string>()
             .HasMaxLength(50)
+            .IsRequired();
+
+        builder.Property(x => x.FrequencyInterval)
+            .IsRequired();
+
+        builder.Property(x => x.NextDueDate)
             .IsRequired();
 
         builder.Property(x => x.StartDate)
