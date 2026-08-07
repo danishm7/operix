@@ -23,6 +23,7 @@ public sealed class WorkOrderTaskConfiguration : IEntityTypeConfiguration<WorkOr
             .IsRequired();
 
         builder.Property(x => x.Status)
+            .HasConversion<string>()
             .HasMaxLength(50)
             .IsRequired();
 
@@ -35,7 +36,7 @@ public sealed class WorkOrderTaskConfiguration : IEntityTypeConfiguration<WorkOr
         builder.HasOne(x => x.WorkOrder)
             .WithMany(x => x.WorkOrderTasks)
             .HasForeignKey(x => x.WorkOrderId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasIndex(x => new { x.WorkOrderId, x.Sequence })
             .IsUnique();

@@ -31,7 +31,7 @@ public sealed class MaintenanceScheduleConfiguration : IEntityTypeConfiguration<
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(x => x.WorkOrder)
-            .WithOne()
+            .WithOne(x => x.MaintenanceSchedule)
             .HasForeignKey<MaintenanceSchedule>(x => x.WorkOrderId)
             .OnDelete(DeleteBehavior.Restrict);
     }

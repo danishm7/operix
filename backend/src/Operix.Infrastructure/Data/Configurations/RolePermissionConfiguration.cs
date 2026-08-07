@@ -10,7 +10,10 @@ public sealed class RolePermissionConfiguration : IEntityTypeConfiguration<RoleP
     {
         builder.ToTable("role_permission", "core");
 
-        builder.HasKey(x => new { x.RoleId, x.PermissionId });
+        builder.HasKey(x => x.Id);
+
+        builder.HasIndex(x => new { x.RoleId, x.PermissionId })
+            .IsUnique();
 
         builder.HasOne(x => x.Role)
             .WithMany(x => x.RolePermissions)
