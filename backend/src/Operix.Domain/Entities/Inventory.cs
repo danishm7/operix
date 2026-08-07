@@ -14,7 +14,7 @@ public sealed class Inventory : AuditableEntity
 
     public decimal QuantityReserved { get; private set; }
 
-    public decimal QuantityAvailable { get; private set; }
+    public decimal QuantityAvailable => QuantityOnHand - QuantityReserved;
 
     public DateOnly? LastStockedDate { get; private set; }
 
