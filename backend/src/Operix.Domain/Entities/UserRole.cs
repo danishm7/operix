@@ -1,6 +1,8 @@
+using Operix.Domain.Common;
+
 namespace Operix.Domain.Entities;
 
-public sealed class UserRole
+public sealed class UserRole : AuditableEntity
 {
     public int UserId { get; private set; }
 

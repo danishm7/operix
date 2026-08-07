@@ -24,6 +24,7 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<User>
             .IsRequired();
 
         builder.Property(x => x.PasswordHash)
+            .HasMaxLength(500)
             .IsRequired();
 
         builder.Property(x => x.IsActive)
@@ -31,6 +32,9 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.HasIndex(x => x.Email)
             .IsUnique();
+
+        builder.Property(x => x.DepartmentId)
+            .IsRequired(false);
 
         builder.HasOne(x => x.Organization)
             .WithMany(x => x.Users)

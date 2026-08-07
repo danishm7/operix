@@ -1,4 +1,5 @@
 using Operix.Domain.Common;
+using Operix.Domain.Enums;
 
 namespace Operix.Domain.Entities;
 
@@ -12,7 +13,7 @@ public sealed class WorkOrderTask : AuditableEntity
 
     public int Sequence { get; private set; }
 
-    public string Status { get; private set; } = string.Empty;
+    public WorkOrderStatus Status { get; private set; }
 
     public int? EstimatedDuration { get; private set; }
 

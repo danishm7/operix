@@ -10,7 +10,10 @@ public sealed class UserRoleConfiguration : IEntityTypeConfiguration<UserRole>
     {
         builder.ToTable("user_role", "core");
 
-        builder.HasKey(x => new { x.UserId, x.RoleId });
+        builder.HasKey(x => x.Id);
+
+        builder.HasIndex(x => new { x.UserId, x.RoleId })
+            .IsUnique();
 
         builder.HasOne(x => x.User)
             .WithMany(x => x.UserRoles)
