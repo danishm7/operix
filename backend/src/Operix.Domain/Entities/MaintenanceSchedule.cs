@@ -9,7 +9,7 @@ public sealed class MaintenanceSchedule : AuditableEntity
 
     public DateOnly ScheduledDate { get; private set; }
 
-    public DateOnly? CompletedDate { get; private set; }
+    public DateTimeOffset? CompletedDate { get; private set; }
 
     public MaintenanceScheduleStatus Status { get; private set; }
 

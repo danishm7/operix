@@ -27,7 +27,7 @@ public sealed class WorkOrder : AuditableEntity
 
     public DateOnly? DueDate { get; private set; }
 
-    public DateOnly? CompletedDate { get; private set; }
+    public DateTimeOffset? CompletedDate { get; private set; }
 
     public bool IsActive { get; private set; }
 

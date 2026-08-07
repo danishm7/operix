@@ -20,10 +20,6 @@ public sealed class InventoryConfiguration : IEntityTypeConfiguration<Inventory>
             .HasPrecision(18, 2)
             .IsRequired();
 
-        builder.Property(x => x.QuantityAvailable)
-            .HasPrecision(18, 2)
-            .IsRequired();
-
         builder.Property(x => x.LastStockedDate);
 
         builder.HasIndex(x => new
