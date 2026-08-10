@@ -5,7 +5,16 @@
     "**/obj": true
   },
   "editor.formatOnSave": true,
+  "editor.formatOnPaste": false,
   "editor.codeActionsOnSave": {
     "source.organizeImports": "explicit"
+  },
+
+  "[csharp]": {
+    "editor.defaultFormatter": "ms-dotnettools.csharp",
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": false,
+    "editor.insertSpaces": true,
+    "editor.tabSize": 4
   }
 }
