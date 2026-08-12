@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Operix.Infrastructure.Data;
 using Operix.Application.Interfaces.Persistence;
 using Operix.Infrastructure.Repositories;
+using Operix.Infrastructure.Data.Interceptors;
 
 namespace Operix.Infrastructure.Extensions;
 
@@ -24,10 +25,12 @@ public static class InfrastructureServiceExtensions
         }
         else
         {
+            services.AddScoped<AuditSaveChangesInterceptor>();
             services.AddDbContext<OperixDbContext>(options =>
             {
                 options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"))
-                    .UseSnakeCaseNamingConvention();
+                    .UseSnakeCaseNamingConvention()
+                    .AddInterceptors(services.BuildServiceProvider().GetRequiredService<AuditSaveChangesInterceptor>());
             });
         }
 
