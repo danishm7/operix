@@ -1,6 +1,38 @@
-@Operix.Api_HostAddress = http://localhost:5236
+@operixBaseUrl = http://localhost:5236/api
 
-GET {{Operix.Api_HostAddress}}/weatherforecast/
+### Create Organization
+POST {{operixBaseUrl}}/organizations
+Content-Type: application/json
 Accept: application/json
 
-###
+{
+    "name": "ABC Manufacturing",
+    "code": "ABC"
+}
+
+
+### Get Organization by ID
+GET {{operixBaseUrl}}/organizations/1
+Accept: application/json
+
+
+### Get All Organizations
+GET {{operixBaseUrl}}/organizations
+Accept: application/json
+
+
+### Update Organization
+PUT {{operixBaseUrl}}/organizations/1
+Content-Type: application/json
+Accept: application/json
+
+{
+    "name": "ABC Manufacturing Updated",
+    "code": "ABC",
+    "isActive": true
+}
+
+
+### Delete Organization
+DELETE {{operixBaseUrl}}/organizations/1
+Accept: application/json

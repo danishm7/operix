@@ -5,7 +5,7 @@
       "label": "build",
       "type": "process",
       "command": "dotnet",
-      "args": ["build", "${workspaceFolder}/backend/Operix.sln"],
+      "args": ["build", "${workspaceFolder}/backend/Operix.slnx"],
       "problemMatcher": "$msCompile",
       "group": {
         "kind": "build",
