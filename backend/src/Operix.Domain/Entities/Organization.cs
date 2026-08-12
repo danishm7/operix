@@ -8,6 +8,21 @@ public sealed class Organization : AuditableEntity
     public string Code { get; private set; } = string.Empty;
     public bool IsActive { get; private set; }
 
+    public Organization(string name, string code)
+    {
+        Name = name;
+        Code = code;
+        IsActive = true;
+    }
+
+    public void Update(string name, string code, bool isActive)
+    {
+        Name = name;
+        Code = code;
+        IsActive = isActive;
+    }
+
+
     // Navigation Properties
     public ICollection<Department> Departments { get; private set; } = [];
     public ICollection<Location> Locations { get; private set; } = [];
