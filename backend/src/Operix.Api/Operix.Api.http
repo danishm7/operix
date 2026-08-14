@@ -36,3 +36,126 @@ Accept: application/json
 ### Delete Organization
 DELETE {{operixBaseUrl}}/organizations/1
 Accept: application/json
+
+
+
+
+
+### Create Department
+POST {{operixBaseUrl}}/departments
+Content-Type: application/json
+Accept: application/json
+
+{
+    "organizationId": 1,
+    "parentDepartmentId": null,
+    "name": "Maintenance",
+    "code": "MAINTENANCE"
+}
+
+###
+
+### Get Department
+GET {{operixBaseUrl}}/departments/1
+Accept: application/json
+
+###
+
+### Get All Departments
+GET {{operixBaseUrl}}/departments?organizationId=1
+Accept: application/json
+
+###
+
+### Update Department
+PUT {{operixBaseUrl}}/departments/1
+Content-Type: application/json
+Accept: application/json
+
+{
+    "parentDepartmentId": null,
+    "name": "Maintenance",
+    "code": "MAINTENANCE",
+    "isActive": true
+}
+
+###
+
+### Delete Department
+DELETE {{operixBaseUrl}}/departments/2
+Accept: application/json
+
+
+### Duplicate Department Code
+POST {{operixBaseUrl}}/departments
+Content-Type: application/json
+Accept: application/json
+
+{
+    "organizationId": 1,
+    "parentDepartmentId": null,
+    "name": "Maintenance Duplicate",
+    "code": "MAINTENANCE"
+}
+
+
+### Same Department Code - Different Organization
+POST {{operixBaseUrl}}/departments
+Content-Type: application/json
+Accept: application/json
+
+{
+    "organizationId": 2,
+    "parentDepartmentId": null,
+    "name": "Maintenance",
+    "code": "MAINTENANCE"
+}
+
+### Invalid Organization
+POST {{operixBaseUrl}}/departments
+Content-Type: application/json
+Accept: application/json
+
+{
+    "organizationId": 99999,
+    "parentDepartmentId": null,
+    "name": "Production",
+    "code": "PRODUCTION"
+}
+
+### Invalid Parent Department
+POST {{operixBaseUrl}}/departments
+Content-Type: application/json
+Accept: application/json
+
+{
+    "organizationId": 1,
+    "parentDepartmentId": 99999,
+    "name": "Production",
+    "code": "PRODUCTION"
+}
+
+
+### Parent From Different Organization
+POST {{operixBaseUrl}}/departments
+Content-Type: application/json
+Accept: application/json
+
+{
+    "organizationId": 1,
+    "parentDepartmentId": 2,
+    "name": "Production",
+    "code": "PRODUCTION"
+}
+
+### Department Cannot Be Its Own Parent
+PUT {{operixBaseUrl}}/departments/1
+Content-Type: application/json
+Accept: application/json
+
+{
+    "parentDepartmentId": 1,
+    "name": "Maintenance",
+    "code": "MAINTENANCE",
+    "isActive": true
+}

@@ -36,6 +36,7 @@ public static class InfrastructureServiceExtensions
 
         // Register Repositories
         services.AddScoped<IOrganizationRepository, OrganizationRepository>();
+        services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 
         // Register Infrastructure Services
 

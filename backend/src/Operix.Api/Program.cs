@@ -6,6 +6,7 @@ builder.Services.AddControllers();
 
 builder.Services.AddOpenApi();
 builder.Services.AddScoped<OrganizationService>();
+builder.Services.AddScoped<DepartmentService>();
 builder.Services.AddInfrastructure(builder.Configuration);
 
 
