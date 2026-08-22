@@ -1,4 +1,4 @@
-using Operix.Application.DTOs.Organization;
+using Operix.Application.DTOs;
 using Operix.Application.Exceptions;
 using Operix.Application.Interfaces.Persistence;
 using Operix.Domain.Entities;
@@ -40,13 +40,11 @@ public sealed class OrganizationService
             organization.Id,
             organization.Code);
 
-        return new OrganizationDto
-        {
-            Id = organization.Id,
-            Name = organization.Name,
-            Code = organization.Code,
-            IsActive = organization.IsActive
-        };
+        return new OrganizationDto(
+            organization.Id,
+            organization.Name,
+            organization.Code,
+            organization.IsActive);
     }
 
     public async Task<OrganizationDto?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
@@ -58,26 +56,22 @@ public sealed class OrganizationService
             return null;
         }
 
-        return new OrganizationDto
-        {
-            Id = organization.Id,
-            Name = organization.Name,
-            Code = organization.Code,
-            IsActive = organization.IsActive
-        };
+        return new OrganizationDto(
+            organization.Id,
+            organization.Name,
+            organization.Code,
+            organization.IsActive);
     }
 
     public async Task<IReadOnlyList<OrganizationDto>> GetAllAsync(CancellationToken cancellationToken = default)
     {
         var organizations = await _organizationRepository.GetAllAsync(cancellationToken);
 
-        return organizations.Select(o => new OrganizationDto
-        {
-            Id = o.Id,
-            Name = o.Name,
-            Code = o.Code,
-            IsActive = o.IsActive
-        }).ToList();
+        return organizations.Select(o => new OrganizationDto(
+            o.Id,
+            o.Name,
+            o.Code,
+            o.IsActive)).ToList();
     }
 
     public async Task<OrganizationDto?> UpdateAsync(int id, UpdateOrganizationDto dto, CancellationToken cancellationToken = default)
@@ -100,13 +94,11 @@ public sealed class OrganizationService
 
         await _organizationRepository.SaveChangesAsync(cancellationToken);
 
-        return new OrganizationDto
-        {
-            Id = organization.Id,
-            Name = organization.Name,
-            Code = organization.Code,
-            IsActive = organization.IsActive
-        };
+        return new OrganizationDto(
+            organization.Id,
+            organization.Name,
+            organization.Code,
+            organization.IsActive);
     }
 
     public async Task DeleteAsync(int id, CancellationToken cancellationToken = default)

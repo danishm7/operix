@@ -1,5 +1,5 @@
 using Microsoft.Extensions.Logging;
-using Operix.Application.DTOs.Department;
+using Operix.Application.DTOs;
 using Operix.Application.Exceptions;
 using Operix.Application.Interfaces.Persistence;
 using Operix.Domain.Entities;
@@ -144,14 +144,12 @@ public sealed class DepartmentService
 
     private static DepartmentDto MapToDto(Department department)
     {
-        return new DepartmentDto
-        {
-            Id = department.Id,
-            OrganizationId = department.OrganizationId,
-            ParentDepartmentId = department.ParentDepartmentId,
-            Name = department.Name,
-            Code = department.Code,
-            IsActive = department.IsActive
-        };
+        return new DepartmentDto(
+            department.Id,
+            department.OrganizationId,
+            department.ParentDepartmentId,
+            department.Name,
+            department.Code,
+            department.IsActive);
     }
 }
