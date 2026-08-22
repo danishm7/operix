@@ -5,6 +5,8 @@ using Operix.Infrastructure.Data;
 using Operix.Application.Interfaces.Persistence;
 using Operix.Infrastructure.Repositories;
 using Operix.Infrastructure.Data.Interceptors;
+using Operix.Application.Interfaces;
+using Operix.Infrastructure.Services;
 
 namespace Operix.Infrastructure.Extensions;
 
@@ -38,8 +40,13 @@ public static class InfrastructureServiceExtensions
         // Register Repositories
         services.AddScoped<IOrganizationRepository, OrganizationRepository>();
         services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
 
         // Register Infrastructure Services
+        services.AddHttpContextAccessor();
+        services.AddScoped<ICurrentUserService, CurrentUserService>();
+        services.AddScoped<ITokenService, TokenService>();
+        services.AddScoped<IPasswordHasherService, PasswordHasherService>();
 
         return services;
     }

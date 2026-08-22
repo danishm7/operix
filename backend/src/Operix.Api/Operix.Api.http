@@ -1,4 +1,5 @@
 @operixBaseUrl = http://localhost:5236/api
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJkYW5pc2hAZXhhbXBsZS5jb20iLCJleHAiOjE3ODc0MTY5MTIsImlzcyI6Ik9wZXJpeCIsImF1ZCI6Ik9wZXJpeC5BcGkifQ.osOM3D4Abi5QgyrE1wgqTdRoNL0CAtIWgFh_xsvGgr4
 
 ### Create Organization
 POST {{operixBaseUrl}}/organizations
@@ -14,6 +15,7 @@ Accept: application/json
 ### Get Organization by ID
 GET {{operixBaseUrl}}/organizations/1
 Accept: application/json
+Authorization: Bearer {{accessToken}}
 
 
 ### Get All Organizations
@@ -158,4 +160,41 @@ Accept: application/json
     "name": "Maintenance",
     "code": "MAINTENANCE",
     "isActive": true
+}
+
+
+
+### Create User
+POST {{operixBaseUrl}}/users
+Content-Type: application/json
+Accept: application/json
+
+{
+    "organizationId": 1,
+    "departmentId": null,
+    "firstName": "Danish",
+    "lastName": "Malak",
+    "email": "danish@example.com",
+    "password": "Test@123"
+}
+
+
+### Login
+POST {{operixBaseUrl}}/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+    "email": "danish@example.com",
+    "password": "Test@123"
+}
+
+### Login - Invalid Password
+POST {{operixBaseUrl}}/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+    "email": "danish@example.com",
+    "password": "WrongPassword"
 }

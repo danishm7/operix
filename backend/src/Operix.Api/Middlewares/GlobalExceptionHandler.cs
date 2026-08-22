@@ -22,6 +22,7 @@ public class GlobalExceptionHandler : IExceptionHandler
 
         var statusCode = exception switch
         {
+            UnauthorizedAccessException => StatusCodes.Status401Unauthorized,
             NotFoundException => StatusCodes.Status404NotFound,
             ConflictException => StatusCodes.Status409Conflict,
             _ => StatusCodes.Status500InternalServerError
@@ -32,6 +33,7 @@ public class GlobalExceptionHandler : IExceptionHandler
             Status = statusCode,
             Title = statusCode switch
             {
+                StatusCodes.Status401Unauthorized => "Unauthorized",
                 StatusCodes.Status404NotFound => "Resource Not Found",
                 StatusCodes.Status409Conflict => "Conflict",
                 _ => "Internal Server Error"
