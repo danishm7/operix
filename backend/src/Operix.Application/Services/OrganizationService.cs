@@ -1,4 +1,5 @@
 using Operix.Application.DTOs.Organization;
+using Operix.Application.Exceptions;
 using Operix.Application.Interfaces.Persistence;
 using Operix.Domain.Entities;
 
@@ -19,7 +20,7 @@ public sealed class OrganizationService
 
         if (exists)
         {
-            throw new InvalidOperationException($"An organization with code '{dto.Code}' already exists.");
+            throw new ConflictException($"An organization with code '{dto.Code}' already exists.");
         }
 
         var organization = new Organization(dto.Name, dto.Code);
@@ -80,7 +81,7 @@ public sealed class OrganizationService
 
         if (codeExists && organization.Code != dto.Code)
         {
-            throw new InvalidOperationException($"An organization with code '{dto.Code}' already exists.");
+            throw new ConflictException($"An organization with code '{dto.Code}' already exists.");
         }
 
         organization.Update(dto.Name, dto.Code, dto.IsActive);
@@ -102,7 +103,7 @@ public sealed class OrganizationService
 
         if (organization is null)
         {
-            throw new InvalidOperationException($"Organization with ID '{id}' does not exist.");
+            throw new NotFoundException($"Organization with ID '{id}' does not exist.");
         }
 
         await _organizationRepository.DeleteAsync(organization, cancellationToken);

@@ -1,4 +1,5 @@
 using Operix.Application.DTOs.Department;
+using Operix.Application.Exceptions;
 using Operix.Application.Interfaces.Persistence;
 using Operix.Domain.Entities;
 
@@ -19,14 +20,14 @@ public sealed class DepartmentService
 
         if (!organizationExists)
         {
-            throw new InvalidOperationException($"Organization with id '{dto.OrganizationId}' does not exist.");
+            throw new NotFoundException($"Organization with id '{dto.OrganizationId}' does not exist.");
         }
 
         var exists = await _departmentRepository.ExistsByCodeAsync(dto.OrganizationId, dto.Code, cancellationToken);
 
         if (exists)
         {
-            throw new InvalidOperationException($"A department with code '{dto.Code}' already exists in this organization.");
+            throw new ConflictException($"A department with code '{dto.Code}' already exists in this organization.");
         }
 
         // Validate parent department exists and belongs to the same organization
@@ -36,12 +37,12 @@ public sealed class DepartmentService
 
             if (parentDepartment == null)
             {
-                throw new InvalidOperationException($"Parent department with ID '{dto.ParentDepartmentId}' does not exist.");
+                throw new NotFoundException($"Parent department with ID '{dto.ParentDepartmentId}' does not exist.");
             }
 
             if (parentDepartment.OrganizationId != dto.OrganizationId)
             {
-                throw new InvalidOperationException($"Parent department must belong to the same organization.");
+                throw new ConflictException($"Parent department must belong to the same organization.");
             }
         }
 
@@ -80,7 +81,7 @@ public sealed class DepartmentService
 
         if (exists && !string.Equals(department.Code, dto.Code, StringComparison.OrdinalIgnoreCase))
         {
-            throw new InvalidOperationException($"A department with code '{dto.Code}' already exists in this organization.");
+            throw new ConflictException($"A department with code '{dto.Code}' already exists in this organization.");
         }
 
         // Validate parent department exists and belongs to the same organization
@@ -88,19 +89,19 @@ public sealed class DepartmentService
         {
             if (dto.ParentDepartmentId.Value == id)
             {
-                throw new InvalidOperationException("A department cannot be its own parent.");
+                throw new ConflictException("A department cannot be its own parent.");
             }
 
             var parentDepartment = await _departmentRepository.GetByIdAsync(dto.ParentDepartmentId.Value, cancellationToken);
 
             if (parentDepartment == null)
             {
-                throw new InvalidOperationException($"Parent department with ID '{dto.ParentDepartmentId}' does not exist.");
+                throw new NotFoundException($"Parent department with ID '{dto.ParentDepartmentId}' does not exist.");
             }
 
             if (parentDepartment.OrganizationId != department.OrganizationId)
             {
-                throw new InvalidOperationException($"Parent department must belong to the same organization.");
+                throw new ConflictException($"Parent department must belong to the same organization.");
             }
         }
 
@@ -116,7 +117,7 @@ public sealed class DepartmentService
 
         if (department == null)
         {
-            throw new InvalidOperationException($"Department with ID '{id}' does not exist.");
+            throw new NotFoundException($"Department with ID '{id}' does not exist.");
         }
 
         await _departmentRepository.DeleteAsync(department, cancellationToken);
