@@ -11,6 +11,12 @@ builder.Services.AddOpenApi();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 
+builder.Services.AddHttpLogging(options =>
+{
+    options.LoggingFields = Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.RequestPropertiesAndHeaders |
+                            Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.ResponsePropertiesAndHeaders;
+});
+
 builder.Services.AddScoped<OrganizationService>();
 builder.Services.AddScoped<DepartmentService>();
 
@@ -19,6 +25,9 @@ builder.Services.AddInfrastructure(builder.Configuration);
 var app = builder.Build();
 
 app.UseExceptionHandler();
+
+app.UseHttpLogging();
+
 app.MapControllers();
 
 // Configure the HTTP request pipeline.

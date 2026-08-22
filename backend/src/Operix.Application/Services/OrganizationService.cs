@@ -2,16 +2,19 @@ using Operix.Application.DTOs.Organization;
 using Operix.Application.Exceptions;
 using Operix.Application.Interfaces.Persistence;
 using Operix.Domain.Entities;
+using Microsoft.Extensions.Logging;
 
 namespace Operix.Application.Services;
 
 public sealed class OrganizationService
 {
     private readonly IOrganizationRepository _organizationRepository;
+    private readonly ILogger<OrganizationService> _logger;
 
-    public OrganizationService(IOrganizationRepository organizationRepository)
+    public OrganizationService(IOrganizationRepository organizationRepository, ILogger<OrganizationService> logger)
     {
         _organizationRepository = organizationRepository;
+        _logger = logger;
     }
 
     public async Task<OrganizationDto> CreateAsync(CreateOrganizationDto dto, CancellationToken cancellationToken = default)
@@ -20,6 +23,10 @@ public sealed class OrganizationService
 
         if (exists)
         {
+            _logger.LogWarning(
+                "Organization creation failed because code '{Code}' already exists.",
+                dto.Code);
+
             throw new ConflictException($"An organization with code '{dto.Code}' already exists.");
         }
 
@@ -27,6 +34,11 @@ public sealed class OrganizationService
 
         await _organizationRepository.AddAsync(organization, cancellationToken);
         await _organizationRepository.SaveChangesAsync(cancellationToken);
+
+        _logger.LogInformation(
+            "Organization created successfully. OrganizationId: {OrganizationId}, Code: {Code}",
+            organization.Id,
+            organization.Code);
 
         return new OrganizationDto
         {

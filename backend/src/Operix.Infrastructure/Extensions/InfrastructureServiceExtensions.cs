@@ -20,7 +20,8 @@ public static class InfrastructureServiceExtensions
             services.AddDbContext<OperixDbContext>(options =>
             {
                 options.UseInMemoryDatabase("OperixInMemoryDb")
-                    .UseSnakeCaseNamingConvention();
+                    .UseSnakeCaseNamingConvention()
+                    .AddInterceptors(services.BuildServiceProvider().GetRequiredService<AuditSaveChangesInterceptor>());
             });
         }
         else

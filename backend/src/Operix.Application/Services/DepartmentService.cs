@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using Operix.Application.DTOs.Department;
 using Operix.Application.Exceptions;
 using Operix.Application.Interfaces.Persistence;
@@ -8,10 +9,12 @@ namespace Operix.Application.Services;
 public sealed class DepartmentService
 {
     private readonly IDepartmentRepository _departmentRepository;
+    private readonly ILogger<DepartmentService> _logger;
 
-    public DepartmentService(IDepartmentRepository departmentRepository)
+    public DepartmentService(IDepartmentRepository departmentRepository, ILogger<DepartmentService> logger)
     {
         _departmentRepository = departmentRepository;
+        _logger = logger;
     }
 
     public async Task<DepartmentDto> CreateAsync(CreateDepartmentDto dto, CancellationToken cancellationToken = default)
@@ -27,6 +30,11 @@ public sealed class DepartmentService
 
         if (exists)
         {
+            _logger.LogWarning(
+                "Department creation failed because code '{Code}' already exists in OrganizationId: {OrganizationId}.",
+                dto.Code,
+                dto.OrganizationId);
+
             throw new ConflictException($"A department with code '{dto.Code}' already exists in this organization.");
         }
 
@@ -50,6 +58,12 @@ public sealed class DepartmentService
 
         await _departmentRepository.AddAsync(department, cancellationToken);
         await _departmentRepository.SaveChangesAsync(cancellationToken);
+
+        _logger.LogInformation(
+            "Department created successfully. DepartmentId: {DepartmentId}, OrganizationId: {OrganizationId}, Code: {Code}",
+            department.Id,
+            department.OrganizationId,
+            department.Code);
 
         return MapToDto(department);
     }
@@ -89,6 +103,10 @@ public sealed class DepartmentService
         {
             if (dto.ParentDepartmentId.Value == id)
             {
+                _logger.LogWarning(
+                    "Department update failed because DepartmentId: {DepartmentId} cannot be its own parent.",
+                    id);
+
                 throw new ConflictException("A department cannot be its own parent.");
             }
 
