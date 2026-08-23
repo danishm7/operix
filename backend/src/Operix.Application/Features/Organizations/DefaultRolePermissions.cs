@@ -1,7 +1,8 @@
 using System.Collections.ObjectModel;
+using Operix.Application.Features.Permissions;
 
 
-namespace Operix.Application.Authorization;
+namespace Operix.Application.Features.Organizations;
 
 
 public static class DefaultRolePermissions

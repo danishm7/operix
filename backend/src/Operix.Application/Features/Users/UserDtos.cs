@@ -1,4 +1,4 @@
-namespace Operix.Application.DTOs;
+namespace Operix.Application.Features.Users;
 
 public sealed record UserDto(
     int Id,

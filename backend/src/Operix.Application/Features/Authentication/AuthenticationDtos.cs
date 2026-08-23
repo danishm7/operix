@@ -1,4 +1,4 @@
-namespace Operix.Application.DTOs;
+namespace Operix.Application.Features.Authentication;
 
 public sealed record LoginRequest(
     string Email,

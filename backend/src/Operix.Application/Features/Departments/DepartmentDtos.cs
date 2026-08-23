@@ -1,4 +1,4 @@
-namespace Operix.Application.DTOs;
+namespace Operix.Application.Features.Departments;
 
 public sealed record DepartmentDto(
     int Id,

@@ -1,9 +1,8 @@
-using Operix.Application.DTOs;
 using Operix.Application.Exceptions;
 using Operix.Application.Interfaces.Persistence;
 using Operix.Domain.Entities;
 
-namespace Operix.Application.Services;
+namespace Operix.Application.Features.Roles;
 
 public sealed class RoleService
 {

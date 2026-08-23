@@ -1,8 +1,7 @@
-using Operix.Application.DTOs;
 using Operix.Application.Interfaces;
 using Operix.Application.Interfaces.Persistence;
 
-namespace Operix.Application.Services;
+namespace Operix.Application.Features.Authentication;
 
 public sealed class LoginService
 {

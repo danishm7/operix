@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Operix.Domain.Entities;
-using Operix.Infrastructure.Data;
 
 namespace Operix.Infrastructure.Data.Seed;
 

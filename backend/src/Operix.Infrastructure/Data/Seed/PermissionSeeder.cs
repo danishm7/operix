@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using Operix.Application.Features.Permissions;
 using Operix.Domain.Entities;
-
-using Operix.Application.Authorization;
 
 namespace Operix.Infrastructure.Data.Seed;
 

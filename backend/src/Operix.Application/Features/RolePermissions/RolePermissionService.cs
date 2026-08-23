@@ -1,9 +1,9 @@
-using Operix.Application.DTOs;
 using Operix.Application.Exceptions;
+using Operix.Application.Features.Permissions;
 using Operix.Application.Interfaces.Persistence;
 using Operix.Domain.Entities;
 
-namespace Operix.Application.Services;
+namespace Operix.Application.Features.RolePermissions;
 
 public sealed class RolePermissionService
 {

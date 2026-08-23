@@ -1,4 +1,4 @@
-namespace Operix.Application.DTOs;
+namespace Operix.Application.Features.Organizations;
 
 public sealed record OrganizationDto(
     int Id,

@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Operix.Application.DTOs;
-using Operix.Application.Services;
+using Operix.Application.Features.Users;
 
 namespace Operix.Api.Controllers;
 

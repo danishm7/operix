@@ -1,10 +1,9 @@
-using Operix.Application.DTOs;
 using Operix.Application.Exceptions;
 using Operix.Application.Interfaces.Persistence;
 using Operix.Domain.Entities;
 using Microsoft.Extensions.Logging;
 
-namespace Operix.Application.Services;
+namespace Operix.Application.Features.Organizations;
 
 public sealed class OrganizationService
 {

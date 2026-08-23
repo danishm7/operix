@@ -1,4 +1,4 @@
-namespace Operix.Application.DTOs;
+namespace Operix.Application.Features.Permissions;
 
 public sealed record PermissionDto(
     int Id,

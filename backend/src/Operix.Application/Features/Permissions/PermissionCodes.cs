@@ -1,4 +1,4 @@
-namespace Operix.Application.Authorization;
+namespace Operix.Application.Features.Permissions;
 
 public static class PermissionCodes
 {

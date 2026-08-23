@@ -1,7 +1,5 @@
 using Operix.Infrastructure.Extensions;
-using Operix.Application.Services;
 using Operix.Api.Middlewares;
-using Operix.Application.Validators;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +11,12 @@ using Operix.Api.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Operix.Infrastructure.Data;
 using Operix.Infrastructure.Data.Seed;
+using Operix.Application.Features.Organizations;
+using Operix.Application.Features.Users;
+using Operix.Application.Features.Roles;
+using Operix.Application.Features.RolePermissions;
+using Operix.Application.Features.Departments;
+using Operix.Application.Features.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 

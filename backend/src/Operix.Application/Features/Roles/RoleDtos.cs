@@ -1,4 +1,4 @@
-namespace Operix.Application.DTOs;
+namespace Operix.Application.Features.Roles;
 
 public sealed record RoleDto(
     int Id,
