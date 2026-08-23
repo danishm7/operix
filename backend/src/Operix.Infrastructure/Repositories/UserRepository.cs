@@ -64,6 +64,7 @@ public sealed class UserRepository : IUserRepository
     public async Task<IReadOnlyList<string>> GetPermissionCodesAsync(int userId, CancellationToken cancellationToken = default)
     {
         return await _dbContext.UserRoles
+            .AsNoTracking()
             .Where(x => x.UserId == userId)
             .SelectMany(x => x.Role.RolePermissions)
             .Where(x => x.Permission.IsActive)

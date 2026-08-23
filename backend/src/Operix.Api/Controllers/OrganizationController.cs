@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Operix.Api.Authorization;
 using Operix.Application.Features.Organizations;
+using Operix.Application.Features.Permissions;
 
 namespace Operix.Api.Controllers;
 
@@ -17,6 +19,7 @@ public sealed class OrganizationsController : ControllerBase
     }
 
     [HttpPost]
+    [HasPermission(PermissionCodes.OrganizationCreate)]
     public async Task<ActionResult<OrganizationDto>> Create(CreateOrganizationDto dto, CancellationToken cancellationToken)
     {
         var organization = await _organizationService.CreateAsync(dto, cancellationToken);
@@ -28,6 +31,7 @@ public sealed class OrganizationsController : ControllerBase
     }
 
     [HttpGet("{id:int}")]
+    [HasPermission(PermissionCodes.OrganizationRead)]
     public async Task<ActionResult<OrganizationDto>> GetById(int id, CancellationToken cancellationToken)
     {
         var organization = await _organizationService.GetByIdAsync(id, cancellationToken);
@@ -41,6 +45,7 @@ public sealed class OrganizationsController : ControllerBase
     }
 
     [HttpGet]
+    [HasPermission(PermissionCodes.OrganizationRead)]
     public async Task<ActionResult<IReadOnlyList<OrganizationDto>>> GetAll(CancellationToken cancellationToken)
     {
         var organizations = await _organizationService.GetAllAsync(cancellationToken);
@@ -49,6 +54,7 @@ public sealed class OrganizationsController : ControllerBase
     }
 
     [HttpPut("{id:int}")]
+    [HasPermission(PermissionCodes.OrganizationUpdate)]
     public async Task<ActionResult<OrganizationDto>> Update(int id, UpdateOrganizationDto dto, CancellationToken cancellationToken)
     {
         var organization = await _organizationService.UpdateAsync(id, dto, cancellationToken);
@@ -62,6 +68,7 @@ public sealed class OrganizationsController : ControllerBase
     }
 
     [HttpDelete("{id:int}")]
+    [HasPermission(PermissionCodes.OrganizationUpdate)]
     public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
     {
         await _organizationService.DeleteAsync(id, cancellationToken);

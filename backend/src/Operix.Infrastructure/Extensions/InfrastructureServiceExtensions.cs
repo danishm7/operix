@@ -16,26 +16,21 @@ public static class InfrastructureServiceExtensions
     {
         var useInMemoryDatabase = bool.TryParse(configuration["UseInMemoryDatabase"], out var useInMemory) && useInMemory;
 
+        services.AddScoped<AuditSaveChangesInterceptor>();
+
         // Register DbContext
-        if (useInMemoryDatabase)
+        services.AddDbContext<OperixDbContext>((serviceProvider, options) =>
         {
-            services.AddDbContext<OperixDbContext>(options =>
-            {
-                options.UseInMemoryDatabase("OperixInMemoryDb")
-                    .UseSnakeCaseNamingConvention()
-                    .AddInterceptors(services.BuildServiceProvider().GetRequiredService<AuditSaveChangesInterceptor>());
-            });
-        }
-        else
-        {
-            services.AddScoped<AuditSaveChangesInterceptor>();
-            services.AddDbContext<OperixDbContext>(options =>
-            {
-                options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"))
-                    .UseSnakeCaseNamingConvention()
-                    .AddInterceptors(services.BuildServiceProvider().GetRequiredService<AuditSaveChangesInterceptor>());
-            });
-        }
+            if (useInMemoryDatabase)
+                options.UseInMemoryDatabase("OperixInMemoryDb");
+            else
+                options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
+
+            options
+                .UseSnakeCaseNamingConvention()
+                .AddInterceptors(serviceProvider.GetRequiredService<AuditSaveChangesInterceptor>());
+        });
+
         services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<OperixDbContext>());
 
         // Register Repositories
