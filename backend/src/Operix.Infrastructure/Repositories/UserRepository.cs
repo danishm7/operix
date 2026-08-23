@@ -65,4 +65,15 @@ public sealed class UserRepository : IUserRepository
 
         return Task.CompletedTask;
     }
+
+    public async Task<IReadOnlyList<string>> GetPermissionCodesAsync(int userId, CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.UserRoles
+            .Where(x => x.UserId == userId)
+            .SelectMany(x => x.Role.RolePermissions)
+            .Where(x => x.Permission.IsActive)
+            .Select(x => x.Permission.Code)
+            .Distinct()
+            .ToListAsync(cancellationToken);
+    }
 }

@@ -9,6 +9,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Operix.Application.Configuration;
+using Operix.Api.Authorization;
+using Microsoft.AspNetCore.Authorization;
+using Operix.Infrastructure.Data;
+using Operix.Infrastructure.Data.Seed;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -61,6 +65,9 @@ builder.Services.AddOpenApi();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 
+builder.Services.AddScoped<PermissionAuthorizationHandler>();
+builder.Services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
+
 builder.Services.AddHttpLogging(options =>
 {
     options.LoggingFields = Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.RequestPropertiesAndHeaders |
@@ -71,10 +78,20 @@ builder.Services.AddScoped<OrganizationService>();
 builder.Services.AddScoped<DepartmentService>();
 builder.Services.AddScoped<LoginService>();
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<RoleService>();
+builder.Services.AddScoped<RolePermissionService>();
 
 builder.Services.AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
+
+// Seed permissions into the database
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<OperixDbContext>();
+    await PermissionSeeder.SeedAsync(dbContext);
+    await RoleSeeder.SeedAsync(dbContext);
+}
 
 app.UseExceptionHandler();
 

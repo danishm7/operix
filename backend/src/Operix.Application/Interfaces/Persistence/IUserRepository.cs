@@ -14,4 +14,5 @@ public interface IUserRepository
     Task<IReadOnlyList<User>> GetAllAsync(int organizationId, CancellationToken cancellationToken = default);
     Task AddAsync(User user, CancellationToken cancellationToken = default);
     Task DeleteAsync(User user, CancellationToken cancellationToken = default);
+    Task<IReadOnlyList<string>> GetPermissionCodesAsync(int userId, CancellationToken cancellationToken = default);
 }

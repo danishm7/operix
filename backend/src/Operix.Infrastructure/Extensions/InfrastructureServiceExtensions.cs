@@ -41,6 +41,9 @@ public static class InfrastructureServiceExtensions
         services.AddScoped<IOrganizationRepository, OrganizationRepository>();
         services.AddScoped<IDepartmentRepository, DepartmentRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IRoleRepository, RoleRepository>();
+        services.AddScoped<IRolePermissionRepository, RolePermissionRepository>();
+        services.AddScoped<IPermissionRepository, PermissionRepository>();
 
         // Register Infrastructure Services
         services.AddHttpContextAccessor();
