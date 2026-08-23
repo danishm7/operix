@@ -10,11 +10,20 @@ public sealed class OrganizationService
 {
     private readonly IOrganizationRepository _organizationRepository;
     private readonly ILogger<OrganizationService> _logger;
+    private readonly OrganizationRoleSetupService _organizationRoleSetupService;
+    private readonly IApplicationDbContext _dbContext;
 
-    public OrganizationService(IOrganizationRepository organizationRepository, ILogger<OrganizationService> logger)
+    public OrganizationService(
+        IOrganizationRepository organizationRepository,
+        ILogger<OrganizationService> logger,
+        OrganizationRoleSetupService organizationRoleSetupService,
+        IApplicationDbContext dbContext
+        )
     {
         _organizationRepository = organizationRepository;
         _logger = logger;
+        _organizationRoleSetupService = organizationRoleSetupService;
+        _dbContext = dbContext;
     }
 
     public async Task<OrganizationDto> CreateAsync(CreateOrganizationDto dto, CancellationToken cancellationToken = default)
@@ -33,7 +42,8 @@ public sealed class OrganizationService
         var organization = new Organization(dto.Name, dto.Code);
 
         await _organizationRepository.AddAsync(organization, cancellationToken);
-        await _organizationRepository.SaveChangesAsync(cancellationToken);
+        await _organizationRoleSetupService.SetupAsync(organization, cancellationToken);
+        await _dbContext.SaveChangesAsync(cancellationToken);
 
         _logger.LogInformation(
             "Organization created successfully. OrganizationId: {OrganizationId}, Code: {Code}",
@@ -92,7 +102,7 @@ public sealed class OrganizationService
 
         organization.Update(dto.Name, dto.Code, dto.IsActive);
 
-        await _organizationRepository.SaveChangesAsync(cancellationToken);
+        await _dbContext.SaveChangesAsync(cancellationToken);
 
         return new OrganizationDto(
             organization.Id,
@@ -111,6 +121,6 @@ public sealed class OrganizationService
         }
 
         await _organizationRepository.DeleteAsync(organization, cancellationToken);
-        await _organizationRepository.SaveChangesAsync(cancellationToken);
+        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }

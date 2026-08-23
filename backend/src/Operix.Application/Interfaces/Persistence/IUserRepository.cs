@@ -4,7 +4,6 @@ namespace Operix.Application.Interfaces.Persistence;
 
 public interface IUserRepository
 {
-    Task SaveChangesAsync(CancellationToken cancellationToken = default);
     Task<bool> ExistsByEmailAsync(string email, CancellationToken cancellationToken = default);
     Task<bool> OrganizationExistsAsync(int organizationId, CancellationToken cancellationToken = default);
     Task<bool> DepartmentExistsAsync(int departmentId, int organizationId, CancellationToken cancellationToken = default);

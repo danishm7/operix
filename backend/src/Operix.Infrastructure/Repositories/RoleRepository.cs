@@ -14,11 +14,6 @@ public sealed class RoleRepository : IRoleRepository
         _dbContext = dbContext;
     }
 
-    public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
-    {
-        await _dbContext.SaveChangesAsync(cancellationToken);
-    }
-
     public async Task<bool> ExistsByNameAsync(int? organizationId, string name, CancellationToken cancellationToken = default)
     {
         return await _dbContext.Roles
@@ -66,4 +61,8 @@ public sealed class RoleRepository : IRoleRepository
         return Task.CompletedTask;
     }
 
+    public async Task AddRangeAsync(IReadOnlyList<Role> roles, CancellationToken cancellationToken = default)
+    {
+        await _dbContext.Roles.AddRangeAsync(roles, cancellationToken);
+    }
 }

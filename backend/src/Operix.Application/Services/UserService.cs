@@ -10,13 +10,16 @@ public sealed class UserService
 {
     private readonly IUserRepository _userRepository;
     private readonly IPasswordHasherService _passwordHasherService;
+    private readonly IApplicationDbContext _dbContext;
 
     public UserService(
         IUserRepository userRepository,
-        IPasswordHasherService passwordHasherService)
+        IPasswordHasherService passwordHasherService,
+        IApplicationDbContext dbContext)
     {
         _userRepository = userRepository;
         _passwordHasherService = passwordHasherService;
+        _dbContext = dbContext;
     }
 
     public async Task<UserDto> CreateAsync(CreateUserDto dto, CancellationToken cancellationToken = default)
@@ -56,7 +59,7 @@ public sealed class UserService
             passwordHash);
 
         await _userRepository.AddAsync(user, cancellationToken);
-        await _userRepository.SaveChangesAsync(cancellationToken);
+        await _dbContext.SaveChangesAsync(cancellationToken);
 
         return MapToDto(user);
     }
@@ -103,7 +106,7 @@ public sealed class UserService
 
         user.Update(dto.DepartmentId, dto.FirstName, dto.LastName, dto.Email, dto.IsActive);
 
-        await _userRepository.SaveChangesAsync(cancellationToken);
+        await _dbContext.SaveChangesAsync(cancellationToken);
 
         return MapToDto(user);
     }
@@ -118,7 +121,7 @@ public sealed class UserService
         }
 
         await _userRepository.DeleteAsync(user, cancellationToken);
-        await _userRepository.SaveChangesAsync(cancellationToken);
+        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
     private static UserDto MapToDto(User user)

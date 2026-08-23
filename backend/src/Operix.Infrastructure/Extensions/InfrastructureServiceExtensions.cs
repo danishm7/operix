@@ -36,6 +36,7 @@ public static class InfrastructureServiceExtensions
                     .AddInterceptors(services.BuildServiceProvider().GetRequiredService<AuditSaveChangesInterceptor>());
             });
         }
+        services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<OperixDbContext>());
 
         // Register Repositories
         services.AddScoped<IOrganizationRepository, OrganizationRepository>();

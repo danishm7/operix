@@ -4,9 +4,24 @@ namespace Operix.Domain.Entities;
 
 public sealed class Role : AuditableEntity
 {
+    public Role(string name, string? description)
+    {
+        Name = name;
+        Description = description;
+        IsActive = true;
+    }
+
     public Role(int? organizationId, string name, string? description)
     {
         OrganizationId = organizationId;
+        Name = name;
+        Description = description;
+        IsActive = true;
+    }
+
+    public Role(Organization organization, string name, string? description)
+    {
+        Organization = organization;
         Name = name;
         Description = description;
         IsActive = true;

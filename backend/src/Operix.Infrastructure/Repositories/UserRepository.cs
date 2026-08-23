@@ -14,11 +14,6 @@ public sealed class UserRepository : IUserRepository
         _dbContext = dbContext;
     }
 
-    public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
-    {
-        await _dbContext.SaveChangesAsync(cancellationToken);
-    }
-
     public async Task<bool> ExistsByEmailAsync(string email, CancellationToken cancellationToken = default)
     {
         return await _dbContext.Users.AnyAsync(x => x.Email == email, cancellationToken);

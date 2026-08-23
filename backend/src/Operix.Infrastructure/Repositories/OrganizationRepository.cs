@@ -14,11 +14,6 @@ public sealed class OrganizationRepository : IOrganizationRepository
         _dbContext = dbContext;
     }
 
-    public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
-    {
-        await _dbContext.SaveChangesAsync(cancellationToken);
-    }
-
     public async Task<bool> ExistsByCodeAsync(string code, CancellationToken cancellationToken = default)
     {
         return await _dbContext.Organizations.AnyAsync(x => x.Code == code, cancellationToken);

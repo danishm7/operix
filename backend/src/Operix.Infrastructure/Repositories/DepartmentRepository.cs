@@ -14,11 +14,6 @@ public sealed class DepartmentRepository : IDepartmentRepository
         _dbContext = dbContext;
     }
 
-    public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
-    {
-        await _dbContext.SaveChangesAsync(cancellationToken);
-    }
-
     public async Task<bool> ExistsByCodeAsync(int organizationId, string code, CancellationToken cancellationToken = default)
     {
         return await _dbContext.Departments.AnyAsync(x => x.OrganizationId == organizationId && x.Code == code, cancellationToken);

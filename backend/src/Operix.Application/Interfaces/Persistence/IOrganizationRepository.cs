@@ -4,7 +4,6 @@ namespace Operix.Application.Interfaces.Persistence;
 
 public interface IOrganizationRepository
 {
-    Task SaveChangesAsync(CancellationToken cancellationToken = default);
     Task<bool> ExistsByCodeAsync(string code, CancellationToken cancellationToken = default);
     Task AddAsync(Organization organization, CancellationToken cancellationToken = default);
     Task<Organization?> GetByIdAsync(int id, CancellationToken cancellationToken = default);

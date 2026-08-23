@@ -16,7 +16,6 @@ public static class RoleSeeder
         if (role is null)
         {
             role = new Role(
-                null,
                 "System Administrator",
                 "Full access to Operix.");
 

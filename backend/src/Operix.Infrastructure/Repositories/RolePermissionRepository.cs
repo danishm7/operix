@@ -14,11 +14,6 @@ public sealed class RolePermissionRepository : IRolePermissionRepository
         _dbContext = dbContext;
     }
 
-    public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
-    {
-        await _dbContext.SaveChangesAsync(cancellationToken);
-    }
-
     public async Task<Role?> GetRoleAsync(int roleId, CancellationToken cancellationToken = default)
     {
         return await _dbContext.Roles

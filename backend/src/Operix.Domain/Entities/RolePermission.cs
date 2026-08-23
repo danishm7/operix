@@ -3,12 +3,16 @@ namespace Operix.Domain.Entities;
 
 public sealed class RolePermission : AuditableEntity
 {
-    private int id;
-
     public RolePermission(int roleId, int permissionId)
     {
         RoleId = roleId;
         PermissionId = permissionId;
+    }
+
+    public RolePermission(Role role, Permission permission)
+    {
+        Role = role;
+        Permission = permission;
     }
 
     public int RoleId { get; private set; }

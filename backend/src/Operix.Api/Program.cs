@@ -80,6 +80,7 @@ builder.Services.AddScoped<LoginService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<RoleService>();
 builder.Services.AddScoped<RolePermissionService>();
+builder.Services.AddScoped<OrganizationRoleSetupService>();
 
 builder.Services.AddInfrastructure(builder.Configuration);
 

@@ -4,7 +4,6 @@ namespace Operix.Application.Interfaces.Persistence;
 
 public interface IDepartmentRepository
 {
-    Task SaveChangesAsync(CancellationToken cancellationToken = default);
     Task<bool> ExistsByCodeAsync(int organizationId, string code, CancellationToken cancellationToken = default);
     Task<bool> OrganizationExistsAsync(int organizationId, CancellationToken cancellationToken = default);
     Task<Department?> GetByIdAsync(int id, CancellationToken cancellationToken = default);

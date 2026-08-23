@@ -8,10 +8,12 @@ namespace Operix.Application.Services;
 public sealed class RoleService
 {
     private readonly IRoleRepository _roleRepository;
+    private readonly IApplicationDbContext _dbContext;
 
-    public RoleService(IRoleRepository roleRepository)
+    public RoleService(IRoleRepository roleRepository, IApplicationDbContext dbContext)
     {
         _roleRepository = roleRepository;
+        _dbContext = dbContext;
     }
 
     public async Task<RoleDto> CreateAsync(CreateRoleDto dto, CancellationToken cancellationToken = default)
@@ -33,7 +35,7 @@ public sealed class RoleService
         var role = new Role(dto.OrganizationId, dto.Name, dto.Description);
 
         await _roleRepository.AddAsync(role, cancellationToken);
-        await _roleRepository.SaveChangesAsync(cancellationToken);
+        await _dbContext.SaveChangesAsync(cancellationToken);
 
         return MapToDto(role);
     }
@@ -70,7 +72,7 @@ public sealed class RoleService
 
         role.Update(dto.Name, dto.Description, dto.IsActive);
 
-        await _roleRepository.SaveChangesAsync(cancellationToken);
+        await _dbContext.SaveChangesAsync(cancellationToken);
 
         return MapToDto(role);
     }
@@ -85,7 +87,7 @@ public sealed class RoleService
         }
 
         await _roleRepository.DeleteAsync(role, cancellationToken);
-        await _roleRepository.SaveChangesAsync(cancellationToken);
+        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
     private static RoleDto MapToDto(Role role)

@@ -22,4 +22,11 @@ public sealed class PermissionRepository : IPermissionRepository
             .OrderBy(x => x.Name)
             .ToListAsync(cancellationToken);
     }
+
+    public async Task<IReadOnlyList<Permission>> GetByCodesAsync(IReadOnlyList<string> codes, CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Permissions
+            .Where(x => codes.Contains(x.Code) && x.IsActive)
+            .ToListAsync(cancellationToken);
+    }
 }

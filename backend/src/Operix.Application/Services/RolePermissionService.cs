@@ -9,11 +9,13 @@ public sealed class RolePermissionService
 {
     private readonly IRolePermissionRepository _rolePermissionRepository;
     private readonly IPermissionRepository _permissionRepository;
+    private readonly IApplicationDbContext _dbContext;
 
-    public RolePermissionService(IRolePermissionRepository rolePermissionRepository, IPermissionRepository permissionRepository)
+    public RolePermissionService(IRolePermissionRepository rolePermissionRepository, IPermissionRepository permissionRepository, IApplicationDbContext dbContext)
     {
         _rolePermissionRepository = rolePermissionRepository;
         _permissionRepository = permissionRepository;
+        _dbContext = dbContext;
     }
 
     public async Task AssignPermissionsAsync(int roleId, AssignPermissionsDto dto, CancellationToken cancellationToken = default)
@@ -50,7 +52,7 @@ public sealed class RolePermissionService
             await _rolePermissionRepository.AddAsync(rolePermission, cancellationToken);
         }
 
-        await _rolePermissionRepository.SaveChangesAsync(cancellationToken);
+        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
     public async Task<IReadOnlyList<PermissionDto>> GetPermissionsAsync(int roleId, CancellationToken cancellationToken = default)

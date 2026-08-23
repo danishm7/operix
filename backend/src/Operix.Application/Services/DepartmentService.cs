@@ -10,11 +10,13 @@ public sealed class DepartmentService
 {
     private readonly IDepartmentRepository _departmentRepository;
     private readonly ILogger<DepartmentService> _logger;
+    private readonly IApplicationDbContext _dbContext;
 
-    public DepartmentService(IDepartmentRepository departmentRepository, ILogger<DepartmentService> logger)
+    public DepartmentService(IDepartmentRepository departmentRepository, ILogger<DepartmentService> logger, IApplicationDbContext dbContext)
     {
         _departmentRepository = departmentRepository;
         _logger = logger;
+        _dbContext = dbContext;
     }
 
     public async Task<DepartmentDto> CreateAsync(CreateDepartmentDto dto, CancellationToken cancellationToken = default)
@@ -57,7 +59,7 @@ public sealed class DepartmentService
         var department = new Department(dto.OrganizationId, dto.Name, dto.Code);
 
         await _departmentRepository.AddAsync(department, cancellationToken);
-        await _departmentRepository.SaveChangesAsync(cancellationToken);
+        await _dbContext.SaveChangesAsync(cancellationToken);
 
         _logger.LogInformation(
             "Department created successfully. DepartmentId: {DepartmentId}, OrganizationId: {OrganizationId}, Code: {Code}",
@@ -124,7 +126,7 @@ public sealed class DepartmentService
         }
 
         department.Update(dto.ParentDepartmentId, dto.Name, dto.Code, dto.IsActive);
-        await _departmentRepository.SaveChangesAsync(cancellationToken);
+        await _dbContext.SaveChangesAsync(cancellationToken);
 
         return MapToDto(department);
     }
@@ -139,7 +141,7 @@ public sealed class DepartmentService
         }
 
         await _departmentRepository.DeleteAsync(department, cancellationToken);
-        await _departmentRepository.SaveChangesAsync(cancellationToken);
+        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
     private static DepartmentDto MapToDto(Department department)
