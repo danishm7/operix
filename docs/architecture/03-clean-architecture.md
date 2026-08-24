@@ -11,46 +11,63 @@ Operix follows the **Clean Architecture** pattern to separate business logic fro
 ```mermaid
 flowchart TB
 
-Client["👤 Client / Browser"]
+Client["Client / Browser"]
 
-subgraph PresentationLayer["Presentation"]
-    API[".NET 10 Web API"]
-end
+API["Operix.Api<br/>Presentation"]
 
-subgraph ApplicationLayer["Application"]
-    Services["Application Services"]
-end
+Application["Operix.Application<br/>DTOs, Services, Interfaces"]
 
-subgraph DomainLayer["Domain"]
-    Entities["Entities & Business Rules"]
-end
+Domain["Operix.Domain<br/>Entities, Business Rules"]
 
-subgraph InfrastructureLayer["Infrastructure"]
-    Persistence["Entity Framework Core"]
-    Integrations["External Services"]
-end
+Infrastructure["Operix.Infrastructure<br/>EF Core, Repositories, Interceptors"]
 
 Database[("PostgreSQL")]
 
 Client --> API
-API --> Services
-Services --> Entities
-
-Persistence --> Entities
-Persistence --> Database
-
-Integrations --> Entities
+API --> Application
+Application --> Domain
+Infrastructure --> Application
+Infrastructure --> Domain
+Infrastructure --> Database
 ```
+
+## Key Architectural Principles
+
+1. **Clean Architecture**
+   - `Api → Application → Domain`
+   - Infrastructure implements Application abstractions.
+
+2. **Domain Independence**
+   - Domain does not depend on EF Core, PostgreSQL, or ASP.NET.
+
+3. **Thin Controllers**
+   - Controllers handle HTTP concerns only.
+
+4. **Application Services**
+   - Handle use cases and application workflow.
+
+5. **DTOs**
+   - API contracts use DTOs instead of Domain entities.
+
+6. **Repository Pattern**
+   - Interfaces live in Application.
+   - Implementations live in Infrastructure.
+
+7. **Validation**
+   - API → HTTP validation.
+   - Application → use-case validation.
+   - Domain → business rules.
+
 ---
 
 ## Layer Responsibilities
 
-| Layer | Responsibility |
-|--------|----------------|
-| Presentation | API endpoints, middleware, authentication |
-| Application | Use cases, workflow orchestration, validation |
-| Domain | Entities, business rules, domain interfaces |
-| Infrastructure | Database, repositories, external services |
+| Layer          | Responsibility                                |
+| -------------- | --------------------------------------------- |
+| Presentation   | API endpoints, middleware, authentication     |
+| Application    | Use cases, workflow orchestration, validation |
+| Domain         | Entities, business rules, domain interfaces   |
+| Infrastructure | Database, repositories, external services     |
 
 ---
 

@@ -15,9 +15,29 @@ operix/
 │   ├── Operix.sln
 │   ├── src/
 │   │   ├── Operix.Api
+│   │   │   ├── Controllers
+│   │   │   ├── Middlewares
+│   │   │   ├── Filters
+│   │   │   ├── Extensions
+│   │   │
 │   │   ├── Operix.Application
+│   │   │   ├── DTOs
+│   │   │   ├── Interfaces
+│   │   │   │   ├── Persistence
+│   │   │   │
+│   │   │   ├── Services
+│   │   │
 │   │   ├── Operix.Domain
+│   │   │   ├── Common
+│   │   │   ├── Entities
+│   │   │   ├── Enums
+│   │   │
 │   │   └── Operix.Infrastructure
+│   │       ├── Data
+│   │       ├── Extensions
+│   │       ├── Migrations
+│   │       ├── Repositories
+│   │       ├── Services
 │   │
 │   └── tests/
 │
@@ -39,11 +59,11 @@ operix/
 
 ## Backend Projects
 
-| Project | Responsibility |
-|---------|----------------|
-| **Operix.Api** | API endpoints, middleware, authentication |
-| **Operix.Application** | Use cases, services, DTOs, validation |
-| **Operix.Domain** | Entities, business rules, interfaces |
+| Project                   | Responsibility                            |
+| ------------------------- | ----------------------------------------- |
+| **Operix.Api**            | API endpoints, middleware, authentication |
+| **Operix.Application**    | Use cases, services, DTOs, validation     |
+| **Operix.Domain**         | Entities, business rules, interfaces      |
 | **Operix.Infrastructure** | Database, repositories, external services |
 
 ---

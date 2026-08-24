@@ -1,9 +1,10 @@
 using Microsoft.EntityFrameworkCore;
+using Operix.Application.Interfaces.Persistence;
 using Operix.Domain.Entities;
 
 namespace Operix.Infrastructure.Data;
 
-public class OperixDbContext : DbContext
+public class OperixDbContext : DbContext, IApplicationDbContext
 {
     public OperixDbContext(DbContextOptions<OperixDbContext> options) : base(options)
     {
