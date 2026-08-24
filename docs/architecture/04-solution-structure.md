@@ -17,15 +17,24 @@ operix/
 │   │   ├── Operix.Api
 │   │   │   ├── Controllers
 │   │   │   ├── Middlewares
+│   │   │   ├── Authorization
 │   │   │   ├── Filters
-│   │   │   ├── Extensions
 │   │   │
 │   │   ├── Operix.Application
-│   │   │   ├── DTOs
+│   │   │   ├── Features
+│   │   │   │     ├── Organizations
+│   │   │   │     │     ├── OrganizationDtos
+│   │   │   │     │     ├── OrganizationValidators
+│   │   │   │     │     ├── OrganizationService
+│   │   │   │     │
+│   │   │   │     ├── Departments
+│   │   │   │     ├── Users
+│   │   │   │     ├── Roles
+│   │   │   │
 │   │   │   ├── Interfaces
 │   │   │   │   ├── Persistence
 │   │   │   │
-│   │   │   ├── Services
+│   │   │   ├── Authentication
 │   │   │
 │   │   ├── Operix.Domain
 │   │   │   ├── Common
@@ -34,6 +43,11 @@ operix/
 │   │   │
 │   │   └── Operix.Infrastructure
 │   │       ├── Data
+│   │       │    ├── OperixDbContext.cs
+│   │       │    ├── Configurations
+│   │       │    ├── Interceptors
+│   │       │    ├── Seed
+│   │       │
 │   │       ├── Extensions
 │   │       ├── Migrations
 │   │       ├── Repositories
@@ -44,12 +58,12 @@ operix/
 ├── frontend/
 │   └── operix-web/
 │
-├── database/
-│   ├── migrations/
-│   ├── scripts/
-│   └── seeds/
-│
 ├── docs/
+│   ├── architecture
+│   ├── database
+│   ├── roadmap
+│   ├── ui-ux
+│
 ├── docker/
 ├── scripts/
 └── .github/

@@ -75,7 +75,7 @@ Defines the business entities, their attributes, and relationships for Operix.
 | --------------- | ----------- | :------: | ------------------------------------- |
 | id              | int         |   Yes    | Primary key                           |
 | organization_id | int         |   Yes    | Reference to Organization             |
-| department_id   | int         |   Yes    | Reference to Department               |
+| department_id   | int         |    No    | Reference to Department; nullable     |
 | first_name      | string(100) |   Yes    | First name                            |
 | last_name       | string(100) |    No    | Last name                             |
 | email           | string(255) |   Yes    | Login email(unique within the system) |
@@ -87,22 +87,21 @@ Defines the business entities, their attributes, and relationships for Operix.
 | Entity       | Type                      |
 | ------------ | ------------------------- |
 | Organization | Many-to-One               |
-| Department   | Many-to-One               |
+| Department   | Many-to-One (optional)    |
 | Role         | Many-to-Many              |
 | Work Order   | One-to-Many (Assigned To) |
-| Audit Log    | One-to-Many               |
 
 ---
 
 ## Role
 
-| Column          | Type        | Required | Description                          |
-| --------------- | ----------- | :------: | ------------------------------------ |
-| id              | int         |   Yes    | Primary key                          |
-| organization_id | int         |   Yes    | Reference to Organization            |
-| name            | string(100) |   Yes    | Role name                            |
-| description     | string(500) |    No    | Role description                     |
-| is_active       | bool        |   Yes    | Indicates whether the role is active |
+| Column          | Type        | Required | Description                                            |
+| --------------- | ----------- | :------: | ------------------------------------------------------ |
+| id              | int         |   Yes    | Primary key                                            |
+| organization_id | int         |    No    | Reference to Organization; null for system-level roles |
+| name            | string(100) |   Yes    | Role name                                              |
+| description     | string(500) |    No    | Role description                                       |
+| is_active       | bool        |   Yes    | Indicates whether the role is active                   |
 
 ### Relationships
 
@@ -132,10 +131,11 @@ Defines the business entities, their attributes, and relationships for Operix.
 
 ---
 
-## User Role
+## UserRole
 
 | Column  | Type | Required | Description       |
 | ------- | ---- | :------: | ----------------- |
+| id      | int  |   Yes    | Primary Key       |
 | user_id | int  |   Yes    | Reference to User |
 | role_id | int  |   Yes    | Reference to Role |
 
@@ -148,10 +148,11 @@ Defines the business entities, their attributes, and relationships for Operix.
 
 ---
 
-### Role Permission
+### RolePermission
 
 | Column        | Type | Required | Description             |
 | ------------- | ---- | :------: | ----------------------- |
+| id            | int  |   Yes    | Primary Key             |
 | role_id       | int  |   Yes    | Reference to Role       |
 | permission_id | int  |   Yes    | Reference to Permission |
 
@@ -161,4 +162,3 @@ Defines the business entities, their attributes, and relationships for Operix.
 | ---------- | ----------- |
 | Role       | Many-to-One |
 | Permission | Many-to-One |
-

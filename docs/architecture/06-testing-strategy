@@ -1,0 +1,38 @@
+# Testing Strategy
+
+## Purpose
+
+Operix uses automated integration and end-to-end testing. A separate unit-test suite is not maintained.
+
+## Testing Approach
+
+**xUnit → critical backend/API integration**
+
+Used to verify important API and infrastructure boundaries, including:
+
+- HTTP request handling
+- Authentication and authorization
+- Critical application behavior
+- EF Core and database persistence
+- Important infrastructure interactions
+
+Integration tests must remain **minimal and focused**. We do not create tests for every endpoint or CRUD operation.
+
+**Playwright → critical end-to-end workflows**
+
+Used to verify important user journeys through a real browser, such as:
+
+- Login
+- Critical navigation
+- Important business workflows
+- Permission-dependent workflows
+
+E2E tests should focus on business-critical workflows rather than individual UI interactions.
+
+## Tooling Summary
+
+| Area                    | Tool                        |
+| ----------------------- | --------------------------- |
+| Backend/API integration | xUnit                       |
+| Database integration    | PostgreSQL / Testcontainers |
+| End-to-end workflows    | Playwright                  |
