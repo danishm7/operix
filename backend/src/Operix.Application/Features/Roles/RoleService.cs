@@ -17,14 +17,14 @@ public sealed class RoleService
 
     public async Task<RoleDto> CreateAsync(CreateRoleDto dto, CancellationToken cancellationToken = default)
     {
-        var organizationExists = await _roleRepository.OrganizationExistsAsync(dto.OrganizationId.Value, cancellationToken);
+        var organizationExists = await _roleRepository.OrganizationExistsAsync(dto.OrganizationId, cancellationToken);
 
         if (!organizationExists)
         {
             throw new NotFoundException($"Organization with ID '{dto.OrganizationId}' does not exist.");
         }
 
-        var exists = await _roleRepository.ExistsByNameAsync(dto.OrganizationId.Value, dto.Name, cancellationToken);
+        var exists = await _roleRepository.ExistsByNameAsync(dto.OrganizationId, dto.Name, cancellationToken);
 
         if (exists)
         {
@@ -62,7 +62,7 @@ public sealed class RoleService
             return null;
         }
 
-        var exists = await _roleRepository.ExistsByNameAsync(role.OrganizationId.Value, dto.Name, cancellationToken);
+        var exists = await _roleRepository.ExistsByNameAsync(role.OrganizationId, dto.Name, cancellationToken);
 
         if (exists && !string.Equals(role.Name, dto.Name, StringComparison.OrdinalIgnoreCase))
         {

@@ -8,7 +8,7 @@ public sealed record RoleDto(
     bool IsActive);
 
 public sealed record CreateRoleDto(
-    int? OrganizationId,
+    int OrganizationId,
     string Name,
     string? Description);
 
