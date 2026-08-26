@@ -1,0 +1,62 @@
+meta {
+  name: put /api/roles/:id/permissions
+  type: http
+  seq: 6
+  tags: [
+    Roles
+  ]
+}
+
+put {
+  url: {{baseUrl}}/api/roles/:id/permissions
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: 
+}
+
+body:json {
+  {
+    "permissionIds": []
+  }
+}
+
+settings {
+  forwardAuthorizationHeader: false
+}
+
+example {
+  name: 200 Response
+  description: OK
+  
+  request: {
+    url: {{baseUrl}}/api/roles/:id/permissions
+    method: PUT
+    mode: json
+    params:path: {
+      id: 
+    }
+  
+    body:json: {
+      {
+        "permissionIds": []
+      }
+    }
+  }
+  
+  response: {
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: text
+      content: '''
+  
+      '''
+    }
+  }
+}

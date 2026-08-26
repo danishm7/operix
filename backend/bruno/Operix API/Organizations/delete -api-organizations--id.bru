@@ -1,0 +1,50 @@
+meta {
+  name: delete /api/organizations/:id
+  type: http
+  seq: 5
+  tags: [
+    Organizations
+  ]
+}
+
+delete {
+  url: {{baseUrl}}/api/organizations/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: 
+}
+
+settings {
+  forwardAuthorizationHeader: false
+}
+
+example {
+  name: 200 Response
+  description: OK
+  
+  request: {
+    url: {{baseUrl}}/api/organizations/:id
+    method: DELETE
+    mode: none
+    params:path: {
+      id: 
+    }
+  }
+  
+  response: {
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: text
+      content: '''
+  
+      '''
+    }
+  }
+}

@@ -1,0 +1,50 @@
+meta {
+  name: delete /api/departments/:id
+  type: http
+  seq: 5
+  tags: [
+    Departments
+  ]
+}
+
+delete {
+  url: {{baseUrl}}/api/departments/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: 
+}
+
+settings {
+  forwardAuthorizationHeader: false
+}
+
+example {
+  name: 200 Response
+  description: OK
+  
+  request: {
+    url: {{baseUrl}}/api/departments/:id
+    method: DELETE
+    mode: none
+    params:path: {
+      id: 
+    }
+  }
+  
+  response: {
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: text
+      content: '''
+  
+      '''
+    }
+  }
+}

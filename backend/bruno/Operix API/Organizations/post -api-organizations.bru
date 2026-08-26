@@ -1,0 +1,145 @@
+meta {
+  name: post /api/organizations
+  type: http
+  seq: 1
+  tags: [
+    Organizations
+  ]
+}
+
+post {
+  url: {{baseUrl}}/api/organizations
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "name": "",
+    "code": ""
+  }
+}
+
+settings {
+  forwardAuthorizationHeader: false
+}
+
+example {
+  name: 200 Response
+  description: OK
+  
+  request: {
+    url: {{baseUrl}}/api/organizations
+    method: POST
+    mode: json
+    body:json: {
+      {
+        "name": "",
+        "code": ""
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: text/plain
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: text
+      content: '''
+        {
+          "id": "",
+          "name": "",
+          "code": "",
+          "isActive": false
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: 200 Response
+  description: OK
+  
+  request: {
+    url: {{baseUrl}}/api/organizations
+    method: POST
+    mode: json
+    body:json: {
+      {
+        "name": "",
+        "code": ""
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "id": "",
+          "name": "",
+          "code": "",
+          "isActive": false
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: 200 Response
+  description: OK
+  
+  request: {
+    url: {{baseUrl}}/api/organizations
+    method: POST
+    mode: json
+    body:json: {
+      {
+        "name": "",
+        "code": ""
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: text/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "id": "",
+          "name": "",
+          "code": "",
+          "isActive": false
+        }
+      '''
+    }
+  }
+}

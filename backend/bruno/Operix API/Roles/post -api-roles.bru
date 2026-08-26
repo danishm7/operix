@@ -1,0 +1,152 @@
+meta {
+  name: post /api/roles
+  type: http
+  seq: 1
+  tags: [
+    Roles
+  ]
+}
+
+post {
+  url: {{baseUrl}}/api/roles
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "organizationId": "",
+    "name": "",
+    "description": ""
+  }
+}
+
+settings {
+  forwardAuthorizationHeader: false
+}
+
+example {
+  name: 200 Response
+  description: OK
+  
+  request: {
+    url: {{baseUrl}}/api/roles
+    method: POST
+    mode: json
+    body:json: {
+      {
+        "organizationId": "",
+        "name": "",
+        "description": ""
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: text/plain
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: text
+      content: '''
+        {
+          "id": "",
+          "organizationId": "",
+          "name": "",
+          "description": "",
+          "isActive": false
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: 200 Response
+  description: OK
+  
+  request: {
+    url: {{baseUrl}}/api/roles
+    method: POST
+    mode: json
+    body:json: {
+      {
+        "organizationId": "",
+        "name": "",
+        "description": ""
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "id": "",
+          "organizationId": "",
+          "name": "",
+          "description": "",
+          "isActive": false
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: 200 Response
+  description: OK
+  
+  request: {
+    url: {{baseUrl}}/api/roles
+    method: POST
+    mode: json
+    body:json: {
+      {
+        "organizationId": "",
+        "name": "",
+        "description": ""
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: text/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "id": "",
+          "organizationId": "",
+          "name": "",
+          "description": "",
+          "isActive": false
+        }
+      '''
+    }
+  }
+}

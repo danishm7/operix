@@ -1,0 +1,175 @@
+meta {
+  name: put /api/departments/:id
+  type: http
+  seq: 4
+  tags: [
+    Departments
+  ]
+}
+
+put {
+  url: {{baseUrl}}/api/departments/:id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: 
+}
+
+body:json {
+  {
+    "parentDepartmentId": "",
+    "name": "",
+    "code": "",
+    "isActive": false
+  }
+}
+
+settings {
+  forwardAuthorizationHeader: false
+}
+
+example {
+  name: 200 Response
+  description: OK
+  
+  request: {
+    url: {{baseUrl}}/api/departments/:id
+    method: PUT
+    mode: json
+    params:path: {
+      id: 
+    }
+  
+    body:json: {
+      {
+        "parentDepartmentId": "",
+        "name": "",
+        "code": "",
+        "isActive": false
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: text/plain
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: text
+      content: '''
+        {
+          "id": "",
+          "organizationId": "",
+          "parentDepartmentId": "",
+          "name": "",
+          "code": "",
+          "isActive": false
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: 200 Response
+  description: OK
+  
+  request: {
+    url: {{baseUrl}}/api/departments/:id
+    method: PUT
+    mode: json
+    params:path: {
+      id: 
+    }
+  
+    body:json: {
+      {
+        "parentDepartmentId": "",
+        "name": "",
+        "code": "",
+        "isActive": false
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "id": "",
+          "organizationId": "",
+          "parentDepartmentId": "",
+          "name": "",
+          "code": "",
+          "isActive": false
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: 200 Response
+  description: OK
+  
+  request: {
+    url: {{baseUrl}}/api/departments/:id
+    method: PUT
+    mode: json
+    params:path: {
+      id: 
+    }
+  
+    body:json: {
+      {
+        "parentDepartmentId": "",
+        "name": "",
+        "code": "",
+        "isActive": false
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: text/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "id": "",
+          "organizationId": "",
+          "parentDepartmentId": "",
+          "name": "",
+          "code": "",
+          "isActive": false
+        }
+      '''
+    }
+  }
+}
