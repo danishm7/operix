@@ -1,4 +1,5 @@
 using Operix.Application.Exceptions;
+using Operix.Application.Features.Roles;
 using Operix.Application.Interfaces;
 using Operix.Application.Interfaces.Persistence;
 using Operix.Domain.Entities;
@@ -8,15 +9,21 @@ namespace Operix.Application.Features.Users;
 public sealed class UserService
 {
     private readonly IUserRepository _userRepository;
+    private readonly IRoleRepository _roleRepository;
+    private readonly IUserRoleRepository _userRoleRepository;
     private readonly IPasswordHasherService _passwordHasherService;
     private readonly IApplicationDbContext _dbContext;
 
     public UserService(
         IUserRepository userRepository,
+        IRoleRepository roleRepository,
+        IUserRoleRepository userRoleRepository,
         IPasswordHasherService passwordHasherService,
         IApplicationDbContext dbContext)
     {
         _userRepository = userRepository;
+        _roleRepository = roleRepository;
+        _userRoleRepository = userRoleRepository;
         _passwordHasherService = passwordHasherService;
         _dbContext = dbContext;
     }
@@ -121,6 +128,56 @@ public sealed class UserService
 
         await _userRepository.DeleteAsync(user, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task AssignRolesAsync(int userId, AssignRolesDto dto, CancellationToken cancellationToken = default)
+    {
+        var user = await _userRepository.GetTrackedByIdAsync(userId, cancellationToken);
+
+        if (user is null)
+            throw new NotFoundException($"User with ID '{userId}' does not exist.");
+
+        var roleIds = dto.RoleIds.Distinct().ToList();
+
+        var roles = await _roleRepository.GetByIdsAsync(roleIds, cancellationToken);
+
+        if (roles.Count != roleIds.Count)
+            throw new NotFoundException("One or more roles do not exist or are inactive.");
+
+        if (roles.Any(x => x.OrganizationId != user.OrganizationId))
+            throw new ConflictException("One or more roles do not belong to the user's organization.");
+
+        var existingUserRoles = await _userRoleRepository.GetByUserIdAsync(userId, cancellationToken);
+
+        foreach (var userRole in existingUserRoles)
+        {
+            await _userRoleRepository.DeleteAsync(userRole, cancellationToken);
+        }
+
+        foreach (var role in roles)
+        {
+            await _userRoleRepository.AddAsync(new UserRole(userId, role.Id), cancellationToken);
+        }
+
+        await _dbContext.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<IReadOnlyList<RoleDto>> GetRolesAsync(int userId, CancellationToken cancellationToken = default)
+    {
+        var user = await _userRepository.GetByIdAsync(userId, cancellationToken);
+
+        if (user is null)
+            throw new NotFoundException($"User with ID '{userId}' does not exist.");
+
+        var userRoles = await _userRoleRepository.GetByUserIdAsync(userId, cancellationToken);
+
+        return [.. userRoles.Select(x => new RoleDto(
+            x.Role.Id,
+            x.Role.OrganizationId,
+            x.Role.Name,
+            x.Role.Description,
+            x.Role.IsActive))
+        ];
     }
 
     private static UserDto MapToDto(User user)

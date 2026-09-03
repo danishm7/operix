@@ -23,3 +23,6 @@ public sealed record UpdateUserDto(
     string? LastName,
     string Email,
     bool IsActive);
+
+public sealed record AssignRolesDto(
+    IReadOnlyList<int> RoleIds);

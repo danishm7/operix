@@ -12,4 +12,5 @@ public interface IRoleRepository
     Task AddAsync(Role role, CancellationToken cancellationToken = default);
     Task DeleteAsync(Role role, CancellationToken cancellationToken = default);
     Task AddRangeAsync(IReadOnlyList<Role> roles, CancellationToken cancellationToken = default);
+    Task<IReadOnlyList<Role>> GetByIdsAsync(IReadOnlyList<int> ids, CancellationToken cancellationToken = default);
 }

@@ -65,4 +65,9 @@ public sealed class RoleRepository : IRoleRepository
     {
         await _dbContext.Roles.AddRangeAsync(roles, cancellationToken);
     }
+
+    public async Task<IReadOnlyList<Role>> GetByIdsAsync(IReadOnlyList<int> ids, CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Roles.Where(x => ids.Contains(x.Id) && x.IsActive).ToListAsync(cancellationToken);
+    }
 }
