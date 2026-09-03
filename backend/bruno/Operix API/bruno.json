@@ -5,5 +5,15 @@
     "node_modules",
     ".git"
   ],
-  "version": "1"
+  "version": "1",
+  "openapi": [
+    {
+      "sourceUrl": "../../../docs/api/openapi.json",
+      "groupBy": "tags",
+      "autoCheck": true,
+      "autoCheckInterval": 5,
+      "lastSyncDate": "2026-09-03T20:45:53.633Z",
+      "specHash": "b26147cdc2bc38289785f6dedeb60d92"
+    }
+  ]
 }
