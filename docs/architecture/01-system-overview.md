@@ -33,7 +33,6 @@ Build a modular enterprise platform that evolves from a CMMS into a complete Ent
 
 ## Target Users
 
-- Super Administrators
 - Organization Administrators
 - Maintenance Managers
 - Technicians

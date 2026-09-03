@@ -11,7 +11,7 @@ public sealed class Role : AuditableEntity
         IsActive = true;
     }
 
-    public Role(int? organizationId, string name, string? description)
+    public Role(int organizationId, string name, string? description)
     {
         OrganizationId = organizationId;
         Name = name;
@@ -34,7 +34,7 @@ public sealed class Role : AuditableEntity
         IsActive = isActive;
     }
 
-    public int? OrganizationId { get; private set; }
+    public int OrganizationId { get; private set; }
     public string Name { get; private set; } = string.Empty;
     public string? Description { get; private set; }
     public bool IsActive { get; private set; }

@@ -98,7 +98,7 @@ using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<OperixDbContext>();
     await PermissionSeeder.SeedAsync(dbContext);
-    await RoleSeeder.SeedAsync(dbContext);
+    await InitialAdminSeeder.SeedAsync(dbContext);
 }
 
 app.UseExceptionHandler();
