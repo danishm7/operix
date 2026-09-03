@@ -14,18 +14,20 @@ put {
 }
 
 params:path {
-  id: 
+  id: 7
 }
 
 body:json {
   {
-    "name": "",
-    "description": "",
-    "isActive": false
+    "name": "Maintenance Planner",
+    "description": "Plans and coordinates maintenance activities.",
+    "isActive": true
   }
 }
 
 settings {
+  encodeUrl: false
+  timeout: 0
   forwardAuthorizationHeader: false
 }
 

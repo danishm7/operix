@@ -15,13 +15,16 @@ post {
 
 body:json {
   {
-    "organizationId": "",
-    "name": "",
-    "description": ""
+    "organizationId": 1,
+    "name": "Maintenance Planner",
+    "description": "Manages maintenance planning activities.",
+    "isActive": true
   }
 }
 
 settings {
+  encodeUrl: false
+  timeout: 0
   forwardAuthorizationHeader: false
 }
 

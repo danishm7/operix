@@ -8,16 +8,18 @@ meta {
 }
 
 get {
-  url: {{baseUrl}}/api/users
+  url: {{baseUrl}}/api/users?organizationId=1
   body: none
   auth: inherit
 }
 
 params:query {
-  ~organizationId: 
+  organizationId: 1
 }
 
 settings {
+  encodeUrl: false
+  timeout: 0
   forwardAuthorizationHeader: false
 }
 

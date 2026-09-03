@@ -14,20 +14,22 @@ put {
 }
 
 params:path {
-  id: 
+  id: 3
 }
 
 body:json {
   {
-    "departmentId": "",
-    "firstName": "",
-    "lastName": "",
-    "email": "",
-    "isActive": false
+    "departmentId": null,
+    "firstName": "John",
+    "lastName": "Smith",
+    "email": "john.smith@example.com",
+    "isActive": true
   }
 }
 
 settings {
+  encodeUrl: false
+  timeout: 0
   forwardAuthorizationHeader: false
 }
 

@@ -15,16 +15,18 @@ post {
 
 body:json {
   {
-    "organizationId": "",
-    "departmentId": "",
-    "firstName": "",
-    "lastName": "",
-    "email": "",
-    "password": ""
+    "organizationId": 1,
+    "departmentId": null,
+    "firstName": "John",
+    "lastName": "User",
+    "email": "testuser@example.com",
+    "password": "Welcome@123"
   }
 }
 
 settings {
+  encodeUrl: false
+  timeout: 0
   forwardAuthorizationHeader: false
 }
 

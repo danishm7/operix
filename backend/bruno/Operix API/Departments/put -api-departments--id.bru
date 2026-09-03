@@ -14,19 +14,21 @@ put {
 }
 
 params:path {
-  id: 
+  id: 1
 }
 
 body:json {
   {
-    "parentDepartmentId": "",
-    "name": "",
-    "code": "",
-    "isActive": false
+    "parentDepartmentId": null,
+    "name": "Maintenance",
+    "code": "MAINT",
+    "isActive": true
   }
 }
 
 settings {
+  encodeUrl: false
+  timeout: 0
   forwardAuthorizationHeader: false
 }
 

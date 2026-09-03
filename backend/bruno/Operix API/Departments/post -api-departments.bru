@@ -15,14 +15,16 @@ post {
 
 body:json {
   {
-    "organizationId": "",
-    "parentDepartmentId": "",
-    "name": "",
-    "code": ""
+    "organizationId": 1,
+    "parentDepartmentId": null,
+    "name": "Maintenance",
+    "code": "MAINT"
   }
 }
 
 settings {
+  encodeUrl: false
+  timeout: 0
   forwardAuthorizationHeader: false
 }
 

@@ -25,6 +25,8 @@ public static class DefaultRolePermissions
                     PermissionCodes.RoleUpdate,
                     PermissionCodes.RoleDelete,
 
+                    PermissionCodes.PermissionRead,
+
                     PermissionCodes.DepartmentRead,
                     PermissionCodes.DepartmentCreate,
                     PermissionCodes.DepartmentUpdate,
