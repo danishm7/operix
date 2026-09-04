@@ -40,7 +40,27 @@ builder.Services
 
 builder.Services.AddAuthorization();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("Frontend", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 builder.Services.AddControllers();
+builder.Services.AddOpenApi();
+
+builder.Services.AddProblemDetails();
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+
+builder.Services.AddHttpLogging(options =>
+{
+    options.LoggingFields = Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.RequestPropertiesAndHeaders |
+                            Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.ResponsePropertiesAndHeaders;
+});
 
 builder.Services.AddValidatorsFromAssemblyContaining<CreateOrganizationValidator>();
 builder.Services.AddFluentValidationAutoValidation();
@@ -64,22 +84,8 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 });
 
 
-builder.Services.AddOpenApi();
-builder.Services.AddScoped<OrganizationService>();
-builder.Services.AddInfrastructure(builder.Configuration);
-
-
-builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
-builder.Services.AddProblemDetails();
-
 builder.Services.AddScoped<IAuthorizationHandler, PermissionAuthorizationHandler>();
 builder.Services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
-
-builder.Services.AddHttpLogging(options =>
-{
-    options.LoggingFields = Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.RequestPropertiesAndHeaders |
-                            Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.ResponsePropertiesAndHeaders;
-});
 
 builder.Services.AddScoped<OrganizationService>();
 builder.Services.AddScoped<DepartmentService>();
@@ -102,9 +108,9 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.UseExceptionHandler();
-
 app.UseHttpLogging();
-
+app.UseHttpsRedirection();
+app.UseCors("Frontend");
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -115,7 +121,5 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
-
-app.UseHttpsRedirection();
 
 app.Run();
