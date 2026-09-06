@@ -3,22 +3,33 @@ import { ArrowLeft } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 
+import ErrorMessage from "@/components/ErrorMessage";
+import Loader from "@/components/Loader";
+import { showToast } from "@/components/Toast";
 import {
   userCreateSchema,
   userUpdateSchema,
   type UserFormData,
 } from "@/features/users/userSchema";
+import { createUser, updateUser } from "@/features/users/usersApi";
+import { useUser } from "@/features/users/usersQuery";
+import { getApiErrorMessage } from "@/services/api/error";
+import { useEffect } from "react";
 
 function UserFormPage() {
   const navigate = useNavigate();
-  const { userId } = useParams();
+  const { id } = useParams();
+  const userId = Number(id);
+  const isEditMode = Boolean(id);
 
-  const isEditMode = Boolean(userId);
+  const { data: user, isLoading, isError } = useUser(userId);
 
+  // Initialize the form with react-hook-form and zod validation
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    reset,
+    formState: { errors, isSubmitting, isDirty },
   } = useForm<UserFormData>({
     resolver: zodResolver(isEditMode ? userUpdateSchema : userCreateSchema),
     defaultValues: {
@@ -32,9 +43,63 @@ function UserFormPage() {
     },
   });
 
-  const onSubmit = (data: UserFormData) => {
-    console.log(data);
+  // If in edit mode, populate the form with the user's existing data
+  useEffect(() => {
+    if (!user) return;
+
+    reset({
+      firstName: user.firstName,
+      lastName: user.lastName ?? "",
+      email: user.email,
+      departmentId: user.departmentId,
+      password: "",
+      confirmPassword: "",
+      isActive: user.isActive,
+    });
+  }, [user, reset]);
+
+  // Handle form submission for both create and edit modes
+  const onSubmit = async (data: UserFormData) => {
+    try {
+      if (isEditMode) {
+        if (!isDirty) {
+          showToast("No changes made.", "info");
+          navigate("/users");
+          return;
+        }
+
+        await updateUser(userId, {
+          departmentId: data.departmentId,
+          firstName: data.firstName,
+          lastName: data.lastName || null,
+          email: data.email,
+          isActive: data.isActive,
+        });
+
+        showToast("User updated successfully.", "success");
+        navigate("/users");
+        return;
+      }
+
+      await createUser({
+        organizationId: 1,
+        departmentId: data.departmentId,
+        firstName: data.firstName,
+        lastName: data.lastName || null,
+        email: data.email,
+        password: data.password!,
+      });
+
+      showToast("User created successfully.", "success");
+      navigate("/users");
+    } catch (error) {
+      showToast(getApiErrorMessage(error), "error");
+    }
   };
+
+  if (isEditMode && isLoading) return <Loader message="Loading user..." />;
+  if (isEditMode && isError)
+    return <ErrorMessage message="Unable to load user." />;
 
   return (
     <div className="space-y-6">
@@ -61,7 +126,7 @@ function UserFormPage() {
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="max-w-5xl overflow-hidden rounded-lg border bg-card"
+        className="w-full overflow-hidden rounded-lg border bg-card"
       >
         <div className="grid gap-5 p-6 sm:grid-cols-2">
           <div className="space-y-2">
@@ -203,21 +268,22 @@ function UserFormPage() {
         )}
 
         {isEditMode && (
-          <div className="px-6 py-5">
-            <label className="flex items-start gap-3">
-              <input
-                type="checkbox"
-                {...register("isActive")}
-                className="mt-0.5 size-4 rounded border-input accent-primary"
-              />
+          <div className="flex items-start gap-3 px-6 py-5">
+            <input
+              id="is-active"
+              type="checkbox"
+              {...register("isActive")}
+              className="mt-0.5 size-4 rounded border-input accent-primary"
+            />
 
-              <span>
-                <span className="block text-sm font-medium">Active</span>
-                <span className="mt-0.5 block text-sm text-muted-foreground">
-                  Allow this user to sign in to Operix.
-                </span>
-              </span>
-            </label>
+            <div>
+              <label
+                htmlFor="is-active"
+                className="block cursor-pointer text-sm font-medium"
+              >
+                Active
+              </label>
+            </div>
           </div>
         )}
 
@@ -232,9 +298,16 @@ function UserFormPage() {
 
           <button
             type="submit"
+            disabled={isSubmitting}
             className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary-hover"
           >
-            {isEditMode ? "Save changes" : "Create user"}
+            {isSubmitting
+              ? isEditMode
+                ? "Saving..."
+                : "Creating..."
+              : isEditMode
+                ? "Save changes"
+                : "Create user"}
           </button>
         </div>
       </form>

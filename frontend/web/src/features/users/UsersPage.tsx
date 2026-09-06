@@ -1,6 +1,8 @@
 import { Pencil, Plus, Shield, UserX } from "lucide-react";
 
 import { DataTable, type DataTableColumn } from "@/components/DataTable";
+import ErrorMessage from "@/components/ErrorMessage";
+import Loader from "@/components/Loader";
 import StatusBadge from "@/components/StatusBadge";
 import Tooltip from "@/components/Tooltip";
 import type { User } from "@/features/users/usersApi";
@@ -77,6 +79,9 @@ function UsersPage() {
     },
   ];
 
+  if (isLoading) return <Loader message="Loading users..." />;
+  if (isError) return <ErrorMessage message="Unable to load users." />;
+
   return (
     <div className="space-y-6">
       {/* Header with title and "Add User" button */}
@@ -95,20 +100,12 @@ function UsersPage() {
         </button>
       </div>
 
-      {isError && (
-        <div className="rounded-lg border border-destructive/20 bg-destructive/5 p-4 text-sm text-destructive">
-          Unable to load users.
-        </div>
-      )}
-
       {/* Users table */}
-      {!isLoading && !isError && (
-        <DataTable
-          data={users || []}
-          columns={columns}
-          emptyMessage="No users found."
-        />
-      )}
+      <DataTable
+        data={users || []}
+        columns={columns}
+        emptyMessage="No users found."
+      />
     </div>
   );
 }

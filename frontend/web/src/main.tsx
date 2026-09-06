@@ -1,3 +1,4 @@
+import { Toast } from "@/components/Toast";
 import { AuthProvider } from "@/features/auth/AuthContext";
 import "@/index.css";
 import { router } from "@/routes/router.tsx";
@@ -13,6 +14,7 @@ createRoot(document.getElementById("root")!).render(
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <RouterProvider router={router} />
+        <Toast />
       </AuthProvider>
     </QueryClientProvider>
   </StrictMode>,
