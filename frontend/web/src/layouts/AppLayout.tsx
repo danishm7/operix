@@ -1,25 +1,20 @@
-import { Button } from "@/components/ui/button";
-import { useAuth } from "@/features/auth/AuthContext";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+
+import AppHeader from "@/layouts/AppHeader";
+import AppSidebar from "@/layouts/AppSidebar";
 
 function AppLayout() {
-  const { logout } = useAuth();
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    logout();
-    navigate("/login", { replace: true });
-  };
-
   return (
-    <div className="min-h-screen">
-      <h1 className="p-8 text-2xl font-semibold">Operix</h1>
+    <div className="flex h-screen overflow-hidden bg-background">
+      <AppSidebar />
 
-      <Button variant="outline" onClick={handleLogout}>
-        Logout
-      </Button>
+      <div className="flex min-w-0 flex-1 flex-col">
+        <AppHeader />
 
-      <Outlet />
+        <main className="min-h-0 flex-1 overflow-y-auto p-6">
+          <Outlet />
+        </main>
+      </div>
     </div>
   );
 }
