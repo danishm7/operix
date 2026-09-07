@@ -1,4 +1,3 @@
-using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Operix.Application.Interfaces;
 
@@ -18,7 +17,7 @@ public sealed class CurrentUserService : ICurrentUserService
         get
         {
             var userId = _httpContextAccessor.HttpContext?.User
-                .FindFirst(ClaimTypes.NameIdentifier);
+                .FindFirst(JwtClaimTypes.UserId);
 
             return int.TryParse(userId?.Value, out var id) ? id : null;
         }

@@ -35,8 +35,8 @@ public sealed class LoginService
             throw new UnauthorizedAccessException("Invalid email or password.");
         }
 
-        var accessToken = _tokenService.GenerateToken(user.Id, user.Email);
+        var accessToken = _tokenService.GenerateToken(user);
 
         return new LoginResponse(accessToken);
     }
-}
+}   

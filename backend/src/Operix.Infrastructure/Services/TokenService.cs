@@ -5,6 +5,8 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Operix.Application.Configuration;
 using Operix.Application.Interfaces;
+using Operix.Domain.Entities;
+using Operix.Infrastructure.Services;
 
 namespace Operix.Infrastructure.Services;
 
@@ -17,12 +19,14 @@ public sealed class TokenService : ITokenService
         _jwtOptions = jwtOptions.Value;
     }
 
-    public string GenerateToken(int userId, string email)
+    public string GenerateToken(User user)
     {
         var claims = new List<Claim>
         {
-            new(ClaimTypes.NameIdentifier, userId.ToString()),
-            new(ClaimTypes.Email, email)
+            new(JwtClaimTypes.UserId, user.Id.ToString()),
+            new(JwtClaimTypes.Email, user.Email),
+            new(JwtClaimTypes.FirstName, user.FirstName),
+            new(JwtClaimTypes.LastName, user.LastName ?? ""),
         };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.Key));

@@ -1,6 +1,8 @@
+using Operix.Domain.Entities;
+
 namespace Operix.Application.Interfaces;
 
 public interface ITokenService
 {
-    string GenerateToken(int userId, string email);
+    string GenerateToken(User user);
 }
