@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/features/auth/AuthContext";
 
 function AppHeader() {
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
   const navigate = useNavigate();
 
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -54,13 +54,17 @@ function AppHeader() {
           className="flex items-center gap-3 rounded-md px-2 py-1.5 transition-colors hover:bg-muted"
         >
           <div className="text-right">
-            <p className="text-sm font-medium text-foreground">Danish Malak</p>
+            <p className="text-sm font-medium text-foreground">
+              {user ? `${user.firstName} ${user.lastName ?? ""}`.trim() : ""}
+            </p>
 
-            <p className="text-xs text-muted-foreground">danish@example.com</p>
+            <p className="text-xs text-muted-foreground">{user?.email}</p>
           </div>
 
           <div className="flex size-9 items-center justify-center rounded-full bg-primary text-sm font-medium text-primary-foreground">
-            DM
+            {user
+              ? `${user.firstName[0]}${user.lastName?.[0] ?? ""}`.toUpperCase()
+              : ""}
           </div>
         </button>
 
@@ -69,39 +73,27 @@ function AppHeader() {
             role="menu"
             className="absolute right-0 top-full z-50 mt-2 w-64 overflow-hidden rounded-lg border bg-card shadow-md"
           >
-            <div className="border-b px-4 py-3">
-              <p className="text-sm font-medium text-foreground">
-                Danish Malak
-              </p>
+            <button
+              type="button"
+              role="menuitem"
+              onClick={() => setIsProfileOpen(false)}
+              className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm text-foreground transition-colors hover:bg-muted"
+            >
+              <UserRound className="size-4 text-muted-foreground" />
 
-              <p className="mt-0.5 truncate text-xs text-muted-foreground">
-                danish@example.com
-              </p>
-            </div>
+              <span>Profile</span>
+            </button>
 
-            <div className="p-1">
-              <button
-                type="button"
-                role="menuitem"
-                onClick={() => setIsProfileOpen(false)}
-                className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm text-foreground transition-colors hover:bg-muted"
-              >
-                <UserRound className="size-4 text-muted-foreground" />
+            <button
+              type="button"
+              role="menuitem"
+              onClick={handleLogout}
+              className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm text-foreground transition-colors hover:bg-muted"
+            >
+              <LogOut className="size-4 text-muted-foreground" />
 
-                <span>Profile</span>
-              </button>
-
-              <button
-                type="button"
-                role="menuitem"
-                onClick={handleLogout}
-                className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm text-foreground transition-colors hover:bg-muted"
-              >
-                <LogOut className="size-4 text-muted-foreground" />
-
-                <span>Sign out</span>
-              </button>
-            </div>
+              <span>Sign out</span>
+            </button>
           </div>
         )}
       </div>

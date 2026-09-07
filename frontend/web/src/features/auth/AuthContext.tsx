@@ -5,6 +5,7 @@ import {
   removeAccessToken,
   storeAccessToken,
 } from "@/features/auth/authStorage";
+import { getUserFromToken, type AuthUser } from "@/features/auth/jwt";
 import {
   createContext,
   useContext,
@@ -15,6 +16,7 @@ import {
 
 interface AuthContextValue {
   accessToken: string | null;
+  user: AuthUser | null;
   isAuthenticated: boolean;
   login: (request: LoginRequest) => Promise<void>;
   logout: () => void;
@@ -28,6 +30,7 @@ interface AuthProviderProps {
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [accessToken, setAccessToken] = useState<string | null>(getAccessToken);
+  const user = accessToken ? getUserFromToken(accessToken) : null;
 
   useEffect(() => {
     return subscribeToAuthEvent("unauthorized", () => {
@@ -48,6 +51,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const value: AuthContextValue = {
     accessToken,
+    user,
     isAuthenticated: accessToken !== null,
     login: handleLogin,
     logout,
