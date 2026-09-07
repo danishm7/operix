@@ -46,7 +46,11 @@ public sealed class UserRepository : IUserRepository
 
     public async Task<IReadOnlyList<User>> GetAllAsync(int organizationId, CancellationToken cancellationToken = default)
     {
-        return await _dbContext.Users.AsNoTracking().Where(x => x.OrganizationId == organizationId).ToListAsync(cancellationToken);
+        return await _dbContext.Users.AsNoTracking()
+            .Where(x => x.OrganizationId == organizationId)
+            .OrderBy(x => x.FirstName)
+            .ThenBy(x => x.LastName)
+            .ToListAsync(cancellationToken);
     }
 
     public async Task AddAsync(User user, CancellationToken cancellationToken = default)

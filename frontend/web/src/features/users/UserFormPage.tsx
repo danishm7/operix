@@ -6,6 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import ErrorMessage from "@/components/ErrorMessage";
 import Loader from "@/components/Loader";
 import { showToast } from "@/components/Toast";
+import { useAuth } from "@/features/auth/AuthContext";
 import {
   userCreateSchema,
   userUpdateSchema,
@@ -23,6 +24,9 @@ function UserFormPage() {
   const isEditMode = Boolean(id);
 
   const { data: user, isLoading, isError } = useUser(userId);
+  const { currentUser } = useAuth();
+
+  if (!currentUser) return null;
 
   // Initialize the form with react-hook-form and zod validation
   const {
@@ -82,7 +86,7 @@ function UserFormPage() {
       }
 
       await createUser({
-        organizationId: 1,
+        organizationId: currentUser.organizationId,
         departmentId: data.departmentId,
         firstName: data.firstName,
         lastName: data.lastName || null,

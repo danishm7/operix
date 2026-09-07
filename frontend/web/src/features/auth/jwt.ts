@@ -1,5 +1,6 @@
 export interface AuthUser {
   id: number;
+  organizationId: number;
   firstName: string;
   lastName: string | null;
   email: string;
@@ -7,6 +8,7 @@ export interface AuthUser {
 
 interface JwtPayload {
   sub: string;
+  organization_id: number;
   email: string;
   given_name: string;
   family_name?: string;
@@ -21,6 +23,7 @@ export function getUserFromToken(accessToken: string): AuthUser {
 
   return {
     id: Number(decodedPayload.sub),
+    organizationId: Number(decodedPayload.organization_id),
     firstName: decodedPayload.given_name,
     lastName: decodedPayload.family_name ?? null,
     email: decodedPayload.email,

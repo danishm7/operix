@@ -5,12 +5,21 @@ import ErrorMessage from "@/components/ErrorMessage";
 import Loader from "@/components/Loader";
 import StatusBadge from "@/components/StatusBadge";
 import Tooltip from "@/components/Tooltip";
+import { useAuth } from "@/features/auth/AuthContext";
 import type { User } from "@/features/users/usersApi";
 import { useUsers } from "@/features/users/usersQuery";
 import { useNavigate } from "react-router-dom";
 
 function UsersPage() {
-  const { data: users, isLoading, isError } = useUsers(1);
+  const { currentUser } = useAuth();
+
+  if (!currentUser) return null;
+
+  const {
+    data: users,
+    isLoading,
+    isError,
+  } = useUsers(currentUser.organizationId);
   const navigate = useNavigate();
 
   const columns: DataTableColumn<User>[] = [

@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/features/auth/AuthContext";
 
 function AppHeader() {
-  const { logout, user } = useAuth();
+  const { logout, currentUser } = useAuth();
   const navigate = useNavigate();
 
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -55,15 +55,19 @@ function AppHeader() {
         >
           <div className="text-right">
             <p className="text-sm font-medium text-foreground">
-              {user ? `${user.firstName} ${user.lastName ?? ""}`.trim() : ""}
+              {currentUser
+                ? `${currentUser.firstName} ${currentUser.lastName ?? ""}`.trim()
+                : ""}
             </p>
 
-            <p className="text-xs text-muted-foreground">{user?.email}</p>
+            <p className="text-xs text-muted-foreground">
+              {currentUser?.email}
+            </p>
           </div>
 
           <div className="flex size-9 items-center justify-center rounded-full bg-primary text-sm font-medium text-primary-foreground">
-            {user
-              ? `${user.firstName[0]}${user.lastName?.[0] ?? ""}`.toUpperCase()
+            {currentUser
+              ? `${currentUser.firstName[0]}${currentUser.lastName?.[0] ?? ""}`.toUpperCase()
               : ""}
           </div>
         </button>
