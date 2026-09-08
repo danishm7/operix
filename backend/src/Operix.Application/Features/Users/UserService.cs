@@ -64,7 +64,27 @@ public sealed class UserService
             dto.Email,
             passwordHash);
 
+        var roleIds = dto.RoleIds.Distinct().ToList();
+        var roles = await _roleRepository.GetByIdsAsync(roleIds, cancellationToken);
+
+        if (roles.Count != roleIds.Count)
+        {
+            throw new NotFoundException("One or more roles do not exist or are inactive.");
+        }
+
+        if (roles.Any(x => x.OrganizationId != dto.OrganizationId))
+        {
+            throw new ConflictException("One or more roles do not belong to the organization.");
+        }
+
         await _userRepository.AddAsync(user, cancellationToken);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+
+        foreach (var role in roles)
+        {
+            await _userRoleRepository.AddAsync(new UserRole(user.Id, role.Id), cancellationToken);
+        }
+
         await _dbContext.SaveChangesAsync(cancellationToken);
 
         return MapToDto(user);

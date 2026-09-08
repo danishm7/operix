@@ -13,6 +13,7 @@ export interface User {
 export interface CreateUserRequest {
   organizationId: number;
   departmentId: number | null;
+  roleIds: number[];
   firstName: string;
   lastName: string | null;
   email: string;

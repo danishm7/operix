@@ -1244,7 +1244,8 @@
           "firstName",
           "lastName",
           "email",
-          "password"
+          "password",
+          "roleIds"
         ],
         "type": "object",
         "properties": {
@@ -1279,6 +1280,17 @@
           },
           "password": {
             "type": "string"
+          },
+          "roleIds": {
+            "type": "array",
+            "items": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
+              "format": "int32"
+            }
           }
         }
       },

@@ -5,6 +5,7 @@ const baseUserSchema = {
   lastName: z.string().trim().min(1, "Last name is required"),
   email: z.email("Enter a valid email address"),
   departmentId: z.number().nullable(),
+  roleIds: z.array(z.number()).min(1, "At least one role must be selected"),
   password: z.string().optional(),
   confirmPassword: z.string().optional(),
   isActive: z.boolean(),

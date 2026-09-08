@@ -15,7 +15,8 @@ public sealed record CreateUserDto(
     string FirstName,
     string? LastName,
     string Email,
-    string Password);
+    string Password,
+    IReadOnlyList<int> RoleIds);
 
 public sealed record UpdateUserDto(
     int? DepartmentId,

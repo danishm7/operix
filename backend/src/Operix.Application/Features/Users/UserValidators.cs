@@ -29,6 +29,10 @@ public sealed class CreateUserValidator : AbstractValidator<CreateUserDto>
         RuleFor(x => x.Password)
             .NotEmpty()
             .MinimumLength(8);
+
+        RuleFor(x => x.RoleIds)
+            .NotEmpty()
+            .WithMessage("At least one role must be assigned to the user.");
     }
 }
 
