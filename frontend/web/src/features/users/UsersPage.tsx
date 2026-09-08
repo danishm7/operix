@@ -1,4 +1,4 @@
-import { Pencil, Plus, Shield, UserX } from "lucide-react";
+import { Pencil, Plus, UserX } from "lucide-react";
 
 import { DataTable, type DataTableColumn } from "@/components/DataTable";
 import ErrorMessage from "@/components/ErrorMessage";
@@ -47,7 +47,7 @@ function UsersPage() {
     {
       key: "actions",
       header: "Actions",
-      width: "140px",
+      width: "100px",
       align: "right",
       render: (user) => (
         <div className="flex items-center justify-end gap-1">
@@ -59,17 +59,6 @@ function UsersPage() {
               className="rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
             >
               <Pencil className="size-4" />
-            </button>
-          </Tooltip>
-
-          <Tooltip content="Manage roles">
-            <button
-              type="button"
-              aria-label="Manage roles"
-              onClick={() => {}}
-              className="rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-            >
-              <Shield className="size-4" />
             </button>
           </Tooltip>
 

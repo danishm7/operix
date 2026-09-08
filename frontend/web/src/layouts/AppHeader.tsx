@@ -1,4 +1,4 @@
-import { LogOut, UserRound } from "lucide-react";
+import { LogOut, Search, UserRound } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -11,7 +11,6 @@ function AppHeader() {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
 
-  // Close the profile dropdown when clicking outside or pressing Escape
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -44,62 +43,85 @@ function AppHeader() {
   };
 
   return (
-    <header className="flex h-16 shrink-0 items-center justify-end border-b bg-card px-6">
-      <div ref={profileRef} className="relative">
-        <button
+    <header className="flex h-20 shrink-0 items-center justify-between border-b border-border bg-card/80 px-6 backdrop-blur-sm">
+      <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 rounded-xl border border-border bg-muted px-3 py-2 text-sm text-muted-foreground shadow-sm">
+          <Search className="size-4 text-muted-foreground" />
+          <span>Search assets, work orders...</span>
+        </div>
+      </div>
+
+      <div className="flex items-center gap-3">
+        {/* <button
           type="button"
-          onClick={() => setIsProfileOpen((open) => !open)}
-          aria-expanded={isProfileOpen}
-          aria-haspopup="menu"
-          className="flex items-center gap-3 rounded-md px-2 py-1.5 transition-colors hover:bg-muted"
+          className="flex items-center gap-2 rounded-xl border border-border bg-muted px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
         >
-          <div className="text-right">
-            <p className="text-sm font-medium text-foreground">
-              {currentUser
-                ? `${currentUser.firstName} ${currentUser.lastName ?? ""}`.trim()
-                : ""}
-            </p>
+          <CalendarDays className="size-4" />
+          This week
+        </button> */}
 
-            <p className="text-xs text-muted-foreground">
-              {currentUser?.email}
-            </p>
-          </div>
+        {/* <button
+          type="button"
+          className="flex size-10 items-center justify-center rounded-xl border border-border bg-muted text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+          aria-label="Notifications"
+        >
+          <Bell className="size-4" />
+        </button> */}
 
-          <div className="flex size-9 items-center justify-center rounded-full bg-primary text-sm font-medium text-primary-foreground">
-            {currentUser
-              ? `${currentUser.firstName[0]}${currentUser.lastName?.[0] ?? ""}`.toUpperCase()
-              : ""}
-          </div>
-        </button>
-
-        {isProfileOpen && (
-          <div
-            role="menu"
-            className="absolute right-0 top-full z-50 mt-2 w-64 overflow-hidden rounded-lg border bg-card shadow-md"
+        <div ref={profileRef} className="relative">
+          <button
+            type="button"
+            onClick={() => setIsProfileOpen((open) => !open)}
+            aria-expanded={isProfileOpen}
+            aria-haspopup="menu"
+            className="flex items-center gap-3 rounded-xl border border-border bg-muted px-2 py-1.5 transition-colors hover:bg-accent"
           >
-            <button
-              type="button"
-              role="menuitem"
-              onClick={() => setIsProfileOpen(false)}
-              className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm text-foreground transition-colors hover:bg-muted"
+            <div className="text-right">
+              <p className="text-sm font-semibold text-card-foreground">
+                {currentUser
+                  ? `${currentUser.firstName} ${currentUser.lastName ?? ""}`.trim()
+                  : ""}
+              </p>
+
+              <p className="text-[11px] text-muted-foreground">
+                {currentUser?.email}
+              </p>
+            </div>
+
+            <div className="flex size-9 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground">
+              {currentUser
+                ? `${currentUser.firstName[0]}${currentUser.lastName?.[0] ?? ""}`.toUpperCase()
+                : ""}
+            </div>
+          </button>
+
+          {isProfileOpen && (
+            <div
+              role="menu"
+              className="absolute right-0 top-full z-50 mt-2 w-64 overflow-hidden rounded-2xl border border-border bg-popover shadow-lg"
             >
-              <UserRound className="size-4 text-muted-foreground" />
+              <button
+                type="button"
+                role="menuitem"
+                onClick={() => setIsProfileOpen(false)}
+                className="flex w-full items-center gap-3 px-3 py-2.5 text-sm text-popover-foreground transition-colors hover:bg-muted"
+              >
+                <UserRound className="size-4 text-muted-foreground" />
+                <span>Profile</span>
+              </button>
 
-              <span>Profile</span>
-            </button>
-
-            <button
-              type="button"
-              role="menuitem"
-              onClick={handleLogout}
-              className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm text-foreground transition-colors hover:bg-muted"
-            >
-              <LogOut className="size-4 text-muted-foreground" />
-
-              <span>Sign out</span>
-            </button>
-          </div>
-        )}
+              <button
+                type="button"
+                role="menuitem"
+                onClick={handleLogout}
+                className="flex w-full items-center gap-3 px-3 py-2.5 text-sm text-popover-foreground transition-colors hover:bg-muted"
+              >
+                <LogOut className="size-4 text-muted-foreground" />
+                <span>Sign out</span>
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </header>
   );
