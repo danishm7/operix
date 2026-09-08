@@ -84,7 +84,7 @@ function NavigationItem({ title, url, icon: Icon }: NavigationItemProps) {
 function AppSidebar() {
   return (
     <aside className="flex h-screen w-72 shrink-0 flex-col border-r border-border bg-background/80 backdrop-blur-sm">
-      <div className="flex h-20 items-center border-b border-border px-6">
+      <div className="flex h-16 items-center border-b border-border px-6">
         <OperixLogo className="text-2xl" />
       </div>
 

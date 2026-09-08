@@ -1,4 +1,4 @@
-import { LogOut, Search, UserRound } from "lucide-react";
+import { ChevronDown, LogOut, Search, UserRound } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -43,7 +43,7 @@ function AppHeader() {
   };
 
   return (
-    <header className="flex h-20 shrink-0 items-center justify-between border-b border-border bg-card/80 px-6 backdrop-blur-sm">
+    <header className="flex h-16 shrink-0 items-center justify-between border-b border-border bg-card/80 px-6 backdrop-blur-sm">
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-2 rounded-xl border border-border bg-muted px-3 py-2 text-sm text-muted-foreground shadow-sm">
           <Search className="size-4 text-muted-foreground" />
@@ -74,25 +74,30 @@ function AppHeader() {
             onClick={() => setIsProfileOpen((open) => !open)}
             aria-expanded={isProfileOpen}
             aria-haspopup="menu"
-            className="flex items-center gap-3 rounded-xl border border-border bg-muted px-2 py-1.5 transition-colors hover:bg-accent"
+            className="flex items-center gap-3 border-l border-border px-3 py-1.5 text-left transition-colors hover:bg-muted/50"
           >
-            <div className="text-right">
-              <p className="text-sm font-semibold text-card-foreground">
-                {currentUser
-                  ? `${currentUser.firstName} ${currentUser.lastName ?? ""}`.trim()
-                  : ""}
-              </p>
-
-              <p className="text-[11px] text-muted-foreground">
-                {currentUser?.email}
-              </p>
-            </div>
-
             <div className="flex size-9 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground">
               {currentUser
                 ? `${currentUser.firstName[0]}${currentUser.lastName?.[0] ?? ""}`.toUpperCase()
                 : ""}
             </div>
+
+            <div>
+              <p className="text-sm font-semibold leading-tight text-card-foreground">
+                {currentUser
+                  ? `${currentUser.firstName} ${currentUser.lastName ?? ""}`.trim()
+                  : ""}
+              </p>
+
+              <p className="mt-0.5 text-xs leading-tight text-muted-foreground">
+                {currentUser?.email}
+              </p>
+            </div>
+
+            <ChevronDown
+              className="ml-1 size-4 text-muted-foreground"
+              aria-hidden="true"
+            />
           </button>
 
           {isProfileOpen && (
