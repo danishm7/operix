@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 
-import { getUser, getUsers } from "@/features/users/usersApi";
+import { getUser, getUserRoles, getUsers } from "@/features/users/usersApi";
 
 export function useUsers(organizationId: number) {
   return useQuery({
@@ -14,5 +14,13 @@ export function useUser(userId: number) {
     queryKey: ["user", userId],
     queryFn: () => getUser(userId),
     enabled: userId > 0, // Only fetch for valid user id
+  });
+}
+
+export function useUserRoles(userId: number) {
+  return useQuery({
+    queryKey: ["user-roles", userId],
+    queryFn: () => getUserRoles(userId),
+    enabled: userId > 0,
   });
 }

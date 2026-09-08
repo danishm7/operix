@@ -1,37 +1,44 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowLeft } from "lucide-react";
-import { useForm } from "react-hook-form";
+import { ArrowLeft, Loader2 } from "lucide-react";
+import { useEffect } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 
+import Dropdown, { type DropdownOption } from "@/components/Dropdown";
 import ErrorMessage from "@/components/ErrorMessage";
-import Loader from "@/components/Loader";
 import { showToast } from "@/components/Toast";
 import { useAuth } from "@/features/auth/AuthContext";
+import { useRoles } from "@/features/roles/rolesQuery";
 import {
   userCreateSchema,
   userUpdateSchema,
   type UserFormData,
 } from "@/features/users/userSchema";
 import { createUser, updateUser } from "@/features/users/usersApi";
-import { useUser } from "@/features/users/usersQuery";
+import { useUser, useUserRoles } from "@/features/users/usersQuery";
 import { getApiErrorMessage } from "@/services/api/error";
-import { useEffect } from "react";
 
 function UserFormPage() {
+  const { currentUser } = useAuth();
+
+  if (!currentUser) return null;
+
   const navigate = useNavigate();
   const { id } = useParams();
   const userId = Number(id);
   const isEditMode = Boolean(id);
 
   const { data: user, isLoading, isError } = useUser(userId);
-  const { currentUser } = useAuth();
+  const { data: userRoles = [], isLoading: areUserRolesLoading } =
+    useUserRoles(userId);
+  const { data: roles = [], isLoading: areRolesLoading } = useRoles(
+    currentUser.organizationId,
+  );
 
-  if (!currentUser) return null;
-
-  // Initialize the form with react-hook-form and zod validation
   const {
     register,
     handleSubmit,
+    control,
     reset,
     formState: { errors, isSubmitting, isDirty },
   } = useForm<UserFormData>({
@@ -41,13 +48,24 @@ function UserFormPage() {
       lastName: "",
       email: "",
       departmentId: null,
+      roleIds: [],
       password: "",
       confirmPassword: "",
       isActive: true,
     },
   });
 
-  // If in edit mode, populate the form with the user's existing data
+  const departmentOptions: DropdownOption[] = [
+    { value: "1", label: "Maintenance" },
+    { value: "2", label: "Operations" },
+    { value: "3", label: "Engineering" },
+  ];
+
+  const roleOptions: DropdownOption[] = roles.map((role) => ({
+    value: String(role.id),
+    label: role.name,
+  }));
+
   useEffect(() => {
     if (!user) return;
 
@@ -56,13 +74,13 @@ function UserFormPage() {
       lastName: user.lastName ?? "",
       email: user.email,
       departmentId: user.departmentId,
+      roleIds: userRoles.map((role) => role.id),
       password: "",
       confirmPassword: "",
       isActive: user.isActive,
     });
-  }, [user, reset]);
+  }, [user, userRoles, reset]);
 
-  // Handle form submission for both create and edit modes
   const onSubmit = async (data: UserFormData) => {
     try {
       if (isEditMode) {
@@ -74,6 +92,7 @@ function UserFormPage() {
 
         await updateUser(userId, {
           departmentId: data.departmentId,
+          roleIds: data.roleIds,
           firstName: data.firstName,
           lastName: data.lastName || null,
           email: data.email,
@@ -88,6 +107,7 @@ function UserFormPage() {
       await createUser({
         organizationId: currentUser.organizationId,
         departmentId: data.departmentId,
+        roleIds: data.roleIds,
         firstName: data.firstName,
         lastName: data.lastName || null,
         email: data.email,
@@ -101,40 +121,52 @@ function UserFormPage() {
     }
   };
 
-  if (isEditMode && isLoading) return <Loader message="Loading user..." />;
+  if (isEditMode && (isLoading || areUserRolesLoading)) {
+    return (
+      <div className="flex items-center justify-center gap-2 rounded-lg border bg-card py-12 text-sm text-muted-foreground">
+        <Loader2 className="size-4 animate-spin" aria-hidden="true" />
+        Loading user...
+      </div>
+    );
+  }
   if (isEditMode && isError)
     return <ErrorMessage message="Unable to load user." />;
 
   return (
     <div className="space-y-6">
-      <div>
+      <div className="flex items-start gap-4">
         <button
           type="button"
           onClick={() => navigate("/users")}
-          className="mb-4 flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+          aria-label="Back to users"
+          className="mt-1 inline-flex size-9 shrink-0 items-center justify-center rounded-lg border border-border text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
         >
           <ArrowLeft className="size-4" />
-          Back to users
         </button>
 
-        <h1 className="text-2xl font-semibold tracking-tight">
-          {isEditMode ? "Edit user" : "Add user"}
-        </h1>
+        <div>
+          <h1 className="text-3xl font-semibold tracking-tight text-foreground">
+            {isEditMode ? "Edit user" : "Add user"}
+          </h1>
 
-        <p className="mt-1 text-sm text-muted-foreground">
-          {isEditMode
-            ? "Update the user's information."
-            : "Create a new user in your organization."}
-        </p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {isEditMode
+              ? "Update the user profile and access settings."
+              : "Create a user and assign them to the right role(s)."}
+          </p>
+        </div>
       </div>
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="w-full overflow-hidden rounded-lg border bg-card"
+        className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm"
       >
-        <div className="grid gap-5 p-6 sm:grid-cols-2">
+        <div className="grid gap-6 p-6 lg:grid-cols-2">
           <div className="space-y-2">
-            <label htmlFor="firstName" className="text-sm font-medium">
+            <label
+              htmlFor="firstName"
+              className="text-sm font-medium text-card-foreground"
+            >
               First name
             </label>
 
@@ -144,7 +176,7 @@ function UserFormPage() {
               placeholder="Enter first name"
               autoComplete="given-name"
               {...register("firstName")}
-              className="h-10 w-full rounded-md border bg-background px-3 text-sm outline-none transition-colors placeholder:text-muted-foreground focus:border-ring focus:ring-2 focus:ring-ring/20"
+              className="h-11 w-full rounded-xl border border-input bg-muted px-3 text-sm text-card-foreground placeholder:text-muted-foreground transition-colors focus:border-ring focus:bg-card focus:ring-4 focus:ring-ring/20"
             />
 
             {errors.firstName && (
@@ -155,7 +187,10 @@ function UserFormPage() {
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="lastName" className="text-sm font-medium">
+            <label
+              htmlFor="lastName"
+              className="text-sm font-medium text-card-foreground"
+            >
               Last name
             </label>
 
@@ -165,7 +200,7 @@ function UserFormPage() {
               placeholder="Enter last name"
               autoComplete="family-name"
               {...register("lastName")}
-              className="h-10 w-full rounded-md border bg-background px-3 text-sm outline-none transition-colors placeholder:text-muted-foreground focus:border-ring focus:ring-2 focus:ring-ring/20"
+              className="h-11 w-full rounded-xl border border-input bg-muted px-3 text-sm text-card-foreground placeholder:text-muted-foreground transition-colors focus:border-ring focus:bg-card focus:ring-4 focus:ring-ring/20"
             />
 
             {errors.lastName && (
@@ -175,9 +210,12 @@ function UserFormPage() {
             )}
           </div>
 
-          <div className="space-y-2">
-            <label htmlFor="email" className="text-sm font-medium">
-              Email
+          <div className="space-y-2 lg:col-span-2">
+            <label
+              htmlFor="email"
+              className="text-sm font-medium text-card-foreground"
+            >
+              Email address
             </label>
 
             <input
@@ -186,7 +224,7 @@ function UserFormPage() {
               placeholder="Enter email address"
               autoComplete="email"
               {...register("email")}
-              className="h-10 w-full rounded-md border bg-background px-3 text-sm outline-none transition-colors placeholder:text-muted-foreground focus:border-ring focus:ring-2 focus:ring-ring/20"
+              className="h-11 w-full rounded-xl border border-input bg-muted px-3 text-sm text-card-foreground placeholder:text-muted-foreground transition-colors focus:border-ring focus:bg-card focus:ring-4 focus:ring-ring/20"
             />
 
             {errors.email && (
@@ -194,108 +232,132 @@ function UserFormPage() {
             )}
           </div>
 
-          <div className="space-y-2">
-            <label htmlFor="departmentId" className="text-sm font-medium">
-              Department
-            </label>
+          <div className="space-y-2 lg:col-span-2">
+            <Controller
+              name="departmentId"
+              control={control}
+              render={({ field }) => (
+                <Dropdown
+                  data={departmentOptions}
+                  label="Department"
+                  placeholder="Select department"
+                  value={
+                    departmentOptions.find(
+                      (option) => option.value === String(field.value),
+                    ) ?? null
+                  }
+                  onChange={(option) =>
+                    field.onChange(option ? Number(option.value) : null)
+                  }
+                  error={errors.departmentId?.message}
+                />
+              )}
+            />
+          </div>
 
-            <select
-              id="departmentId"
-              {...register("departmentId", {
-                setValueAs: (value) => (value === "" ? null : Number(value)),
-              })}
-              className="h-10 w-full rounded-md border bg-background px-3 text-sm outline-none transition-colors focus:border-ring focus:ring-2 focus:ring-ring/20"
-            >
-              <option value="">Select department</option>
-              <option value="1">Maintenance</option>
-              <option value="2">Operations</option>
-              <option value="3">Engineering</option>
-            </select>
-
-            {errors.departmentId && (
-              <p className="text-sm text-destructive">
-                {errors.departmentId.message}
-              </p>
-            )}
+          <div className="space-y-2 lg:col-span-2">
+            <Controller
+              name="roleIds"
+              control={control}
+              render={({ field }) => (
+                <Dropdown
+                  data={roleOptions}
+                  label="Roles"
+                  placeholder="Select roles"
+                  searchPlaceholder="Search roles..."
+                  emptyMessage="No roles available."
+                  isMulti
+                  searchable
+                  loading={areRolesLoading}
+                  value={roleOptions.filter((option) =>
+                    field.value.includes(Number(option.value)),
+                  )}
+                  onChange={(options) =>
+                    field.onChange(
+                      options.map((option) => Number(option.value)),
+                    )
+                  }
+                  error={errors.roleIds?.message}
+                />
+              )}
+            />
           </div>
         </div>
 
         {!isEditMode && (
-          <div className="px-6">
-            <div className="grid gap-5 sm:grid-cols-2">
-              <div className="space-y-2">
-                <label htmlFor="password" className="text-sm font-medium">
-                  Password
-                </label>
+          <div className="grid gap-6 px-6 pb-6 lg:grid-cols-2">
+            <div className="space-y-2">
+              <label
+                htmlFor="password"
+                className="text-sm font-medium text-card-foreground"
+              >
+                Password
+              </label>
 
-                <input
-                  id="password"
-                  type="password"
-                  placeholder="Enter password"
-                  autoComplete="new-password"
-                  {...register("password")}
-                  className="h-10 w-full rounded-md border bg-background px-3 text-sm outline-none transition-colors placeholder:text-muted-foreground focus:border-ring focus:ring-2 focus:ring-ring/20"
-                />
+              <input
+                id="password"
+                type="password"
+                placeholder="Enter password"
+                autoComplete="new-password"
+                {...register("password")}
+                className="h-11 w-full rounded-xl border border-input bg-muted px-3 text-sm text-card-foreground placeholder:text-muted-foreground transition-colors focus:border-ring focus:bg-card focus:ring-4 focus:ring-ring/20"
+              />
 
-                {errors.password && (
-                  <p className="text-sm text-destructive">
-                    {errors.password.message}
-                  </p>
-                )}
-              </div>
+              {errors.password && (
+                <p className="text-sm text-destructive">
+                  {errors.password.message}
+                </p>
+              )}
+            </div>
 
-              <div className="space-y-2">
-                <label
-                  htmlFor="confirmPassword"
-                  className="text-sm font-medium"
-                >
-                  Confirm password
-                </label>
+            <div className="space-y-2">
+              <label
+                htmlFor="confirmPassword"
+                className="text-sm font-medium text-card-foreground"
+              >
+                Confirm password
+              </label>
 
-                <input
-                  id="confirmPassword"
-                  type="password"
-                  placeholder="Confirm password"
-                  autoComplete="new-password"
-                  {...register("confirmPassword")}
-                  className="h-10 w-full rounded-md border bg-background px-3 text-sm outline-none transition-colors placeholder:text-muted-foreground focus:border-ring focus:ring-2 focus:ring-ring/20"
-                />
+              <input
+                id="confirmPassword"
+                type="password"
+                placeholder="Confirm password"
+                autoComplete="new-password"
+                {...register("confirmPassword")}
+                className="h-11 w-full rounded-xl border border-input bg-muted px-3 text-sm text-card-foreground placeholder:text-muted-foreground transition-colors focus:border-ring focus:bg-card focus:ring-4 focus:ring-ring/20"
+              />
 
-                {errors.confirmPassword && (
-                  <p className="text-sm text-destructive">
-                    {errors.confirmPassword.message}
-                  </p>
-                )}
-              </div>
+              {errors.confirmPassword && (
+                <p className="text-sm text-destructive">
+                  {errors.confirmPassword.message}
+                </p>
+              )}
             </div>
           </div>
         )}
 
         {isEditMode && (
-          <div className="flex items-start gap-3 px-6 py-5">
-            <input
-              id="is-active"
-              type="checkbox"
-              {...register("isActive")}
-              className="mt-0.5 size-4 rounded border-input accent-primary"
-            />
+          <div className="px-6 pb-6">
+            <label className="flex items-center gap-3 rounded-xl border border-border bg-muted px-4 py-3">
+              <input
+                id="is-active"
+                type="checkbox"
+                {...register("isActive")}
+                className="size-4 rounded border-input accent-primary"
+              />
 
-            <div>
-              <label
-                htmlFor="is-active"
-                className="block cursor-pointer text-sm font-medium"
-              >
-                Active
-              </label>
-            </div>
+              <span className="text-sm font-medium text-card-foreground">
+                Active user
+              </span>
+            </label>
           </div>
         )}
 
-        <div className="flex justify-end gap-3 g-muted/20 px-6 py-4">
+        <div className="flex items-center justify-end gap-3 border-t border-border bg-muted px-6 py-4">
           <button
             type="button"
             onClick={() => navigate("/users")}
-            className="rounded-md border bg-card px-4 py-2 text-sm font-medium transition-colors hover:bg-muted"
+            className="rounded-xl border border-border bg-card px-4 py-2.5 text-sm font-medium text-card-foreground transition-colors hover:bg-accent"
           >
             Cancel
           </button>
@@ -303,15 +365,15 @@ function UserFormPage() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary-hover"
+            className="rounded-xl bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {isSubmitting
-              ? isEditMode
-                ? "Saving..."
-                : "Creating..."
-              : isEditMode
-                ? "Save changes"
-                : "Create user"}
+            {isSubmitting ? (
+              <Loader2 className="size-4 animate-spin" aria-label="Saving" />
+            ) : isEditMode ? (
+              "Save changes"
+            ) : (
+              "Create user"
+            )}
           </button>
         </div>
       </form>

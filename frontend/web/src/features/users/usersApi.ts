@@ -1,3 +1,4 @@
+import type { Role } from "@/features/roles/rolesApi";
 import { apiClient } from "@/services/api/client";
 
 export interface User {
@@ -22,6 +23,7 @@ export interface CreateUserRequest {
 
 export interface UpdateUserRequest {
   departmentId: number | null;
+  roleIds: number[];
   firstName: string;
   lastName: string | null;
   email: string;
@@ -55,6 +57,12 @@ export async function updateUser(
   request: UpdateUserRequest,
 ): Promise<User> {
   const response = await apiClient.put<User>(`/api/users/${userId}`, request);
+
+  return response.data;
+}
+
+export async function getUserRoles(userId: number): Promise<Role[]> {
+  const response = await apiClient.get<Role[]>(`/api/users/${userId}/roles`);
 
   return response.data;
 }

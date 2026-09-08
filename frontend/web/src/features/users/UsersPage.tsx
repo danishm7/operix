@@ -1,8 +1,7 @@
-import { Pencil, Plus, UserX } from "lucide-react";
+import { Loader2, Pencil, Plus, UserX } from "lucide-react";
 
 import { DataTable, type DataTableColumn } from "@/components/DataTable";
 import ErrorMessage from "@/components/ErrorMessage";
-import Loader from "@/components/Loader";
 import StatusBadge from "@/components/StatusBadge";
 import Tooltip from "@/components/Tooltip";
 import { useAuth } from "@/features/auth/AuthContext";
@@ -77,7 +76,13 @@ function UsersPage() {
     },
   ];
 
-  if (isLoading) return <Loader message="Loading users..." />;
+  if (isLoading)
+    return (
+      <div className="flex items-center justify-center gap-2 rounded-lg border bg-card py-12 text-sm text-muted-foreground">
+        <Loader2 className="size-4 animate-spin" aria-hidden="true" />
+        Loading users...
+      </div>
+    );
   if (isError) return <ErrorMessage message="Unable to load users." />;
 
   return (
