@@ -1544,6 +1544,7 @@
       "UpdateUserDto": {
         "required": [
           "departmentId",
+          "roleIds",
           "firstName",
           "lastName",
           "email",
@@ -1559,6 +1560,17 @@
               "string"
             ],
             "format": "int32"
+          },
+          "roleIds": {
+            "type": "array",
+            "items": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
+              "format": "int32"
+            }
           },
           "firstName": {
             "type": "string"

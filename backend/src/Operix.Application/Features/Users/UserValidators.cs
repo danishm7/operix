@@ -56,5 +56,9 @@ public sealed class UpdateUserValidator : AbstractValidator<UpdateUserDto>
             .NotEmpty()
             .EmailAddress()
             .MaximumLength(255);
+
+        RuleFor(x => x.RoleIds)
+            .NotEmpty()
+            .WithMessage("At least one role must be assigned to the user.");
     }
 }

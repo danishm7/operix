@@ -20,6 +20,7 @@ public sealed record CreateUserDto(
 
 public sealed record UpdateUserDto(
     int? DepartmentId,
+    IReadOnlyList<int> RoleIds,
     string FirstName,
     string? LastName,
     string Email,

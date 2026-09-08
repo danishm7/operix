@@ -130,7 +130,28 @@ public sealed class UserService
             throw new ConflictException($"A user with email '{dto.Email}' already exists.");
         }
 
+        var roleIds = dto.RoleIds.Distinct().ToList();
+        var roles = await _roleRepository.GetByIdsAsync(roleIds, cancellationToken);
+
+        if (roles.Count != roleIds.Count)
+            throw new NotFoundException("One or more roles do not exist or are inactive.");
+
+        if (roles.Any(x => x.OrganizationId != user.OrganizationId))
+            throw new ConflictException("One or more roles do not belong to the user's organization.");
+
         user.Update(dto.DepartmentId, dto.FirstName, dto.LastName, dto.Email, dto.IsActive);
+
+        var existingUserRoles = await _userRoleRepository.GetByUserIdAsync(id, cancellationToken);
+
+        foreach (var userRole in existingUserRoles)
+        {
+            await _userRoleRepository.DeleteAsync(userRole, cancellationToken);
+        }
+
+        foreach (var role in roles)
+        {
+            await _userRoleRepository.AddAsync(new UserRole(id, role.Id), cancellationToken);
+        }
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 
